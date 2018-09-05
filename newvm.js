@@ -39,12 +39,13 @@ try {
         state = aws_provision_response.get('state')
         key_name = state.get('key_name')                        // key name
         availability_zone = state.get('availability_zone')      // availability zone
-        ami_id = state.get('id')                                // Ami ID
+        ami_id = state.get('id')                                // Ami ID ========================= YOU HAVE TO CHECK THE STATE RESPONSE WHICH IS SET IN 
+        log.trace("AMI ID IN NEWVM : ============="+ami_id)
         public_ip = state.get('public_ip')                      // Public ip
         instance_type = state.get('instance_type')              // instance type
         private_ip = state.get('private_ip')                    // Private IP
 
-        reply_message = 'New virtual machine has been created ' + user_name + '. *AWS VM Details:* \n*AMI ID:* ' + id + '\n *Public IP:* ' + public_ip + ' \n*Private IP:* ' + private_ip + ' \nYou can use *' + key_name + '.pem* to access it.'
+        reply_message = 'New virtual machine has been created ' + user_name + '. *AWS VM Details:* \n*AMI ID:* ' + ami_id + '\n *Public IP:* ' + public_ip + ' \n*Private IP:* ' + private_ip + ' \nYou can use *' + key_name + '.pem* to access it.'
         // Slack-Flint bot reply
         body = '{"text": "' + reply_message + '"}'
         // Slack-Flint bot reply flintbit
