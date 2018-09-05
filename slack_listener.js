@@ -170,7 +170,7 @@ try {
             slack_reply_message = 'Hello ' + user_name + ', please set a valid provider(aws).'
             log.trace(slack_reply_message)
         }
-        for (x = 1; i <= command.length; i++) {
+        for (x = 1; x <= command.length; x++) {
             if (command[x] == null || command[x] == '') {
                 // In-case only trigger word is used
                 slack_reply_message = 'Hello ' + user_name + ', The command is invalid.\n <b>List of Valid Commands:</b> \nAWS VM Creation: newvm <provider> <image-type> <instance-type> <region> <availability-zone> \nStart a VM: startvm <provider> <instance-id>\nStop a VM: stopvm <provider> <instance-id>\n Delete a VM: destroyvm <provider> <instance-id>'
