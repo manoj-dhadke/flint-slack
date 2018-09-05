@@ -45,9 +45,10 @@ try {
         instance_type = state.get('instance_type')              // instance type
         private_ip = state.get('private_ip')                    // Private IP
 
-        reply_message = 'New virtual machine has been created ' + user_name + '. *AWS VM Details:* \n*AMI ID:* ' + ami_id + '\n *Public IP:* ' + public_ip + ' \n*Private IP:* ' + private_ip + ' \nYou can use *' + key_name + '.pem* to access it.'
+        reply_message = 'New virtual machine has been created ' + user_name + '. \n*AWS VM Details:* \n*AMI ID:* ' + ami_id + '\n *Public IP:* ' + public_ip + ' \n*Private IP:* ' + private_ip + ' \nYou can use *' + key_name + '* to access it.'
         // Slack-Flint bot reply
         body = '{"text": "' + reply_message + '"}'
+        
         // Slack-Flint bot reply flintbit
         call.bit('flint-slack:add_message.js')
             .set('body', body)
