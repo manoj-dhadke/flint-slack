@@ -41,7 +41,7 @@ try {
 
         // Slack message in-case virtual machine is started successfully
         aws_reply_message = user_name + ', virtual machine with ID(' + instance_id +') has been successfully started on AWS'
-        attahments = '"fallback": "Virtual machine start notification","color": "#36a64e","title": "Started Virtual Machine.","text": "'+user_name + ', virtual machine with ID(' + instance_id +') has been successfully started on AWS", "footer": "Flint","ts": 123456789'
+        attachments = '"fallback": "Virtual machine start notification","color": "#36a64e","title": "Started Virtual Machine.","text": "'+user_name + ', virtual machine with ID(' + instance_id +') has been successfully started on AWS", "footer": "Flint","ts": 123456789'
 
         body =  '{"attachments":"[{'+attachments+'}]"}'     
         //'{"text": "' + aws_reply_message + '"',
