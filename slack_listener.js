@@ -49,8 +49,8 @@ try {
     log.trace("COMMAND WITHOUT TRIGGER : " + command_without_trigger)
     // Getting VM details from command
     provider = command[1]
-    image_type = command[1]
-    instance_type = command[2]
+    image_type = command[2]
+    instance_type = command[3]
 
     availability_zone = command[4]
 
@@ -76,21 +76,10 @@ try {
     // id = message_body['"token'][0]
     // message_data = body.split(' ')
 
-    // Initial notification to slack from FlintBot
-    //http_body = '{"channel": "#' + channel_name + '", "username": "FlintBot", "text": "Hello ' + user_name + ', I got your request and started processing it"}'
-
-    
-
     log.trace("provider" + provider)
 
-    // if message_data.length >= 2
-    // provider = message_data[0]
-    // image_type = message_data[1]
-    // instance_type = message_data[2]
-    // region = message_data[3]
-    // availability_zone = message_data[4]
-
     if (command.length != 0 && provider == "aws") {
+        // Slack-Flint bot request-body for acknowledgement
         acknowledgement_body = '{"text": "Hello, ' + user_name + '. I\'ve got your request and I\'m processing it."}'
         call.bit('flint-slack:add_message.js')
             .set('body', acknowledgement_body)
@@ -99,6 +88,7 @@ try {
             .set('method', method)
             .set('http_connector_name', http_connector_name)
             .sync()
+
         switch (trigger_word) {
             case 'flint':
                 provider = command[1]
@@ -177,13 +167,11 @@ try {
         // }
 
         if (command_without_trigger.length == null || command_without_trigger == '') {
-            // In-case only trigger word is used
+            // In-case only trigger word is used, all valid commands will be listed
             slack_reply_message = user_name + ', this command is invalid.\n *List of Valid Commands:* \n*AWS VM Creation:* \nnewvm <provider> <image-type> <instance-type> <region> <availability-zone> \n*Start a VM:* \nstartvm <provider> <instance-id>\n*Stop a VM:* \nstopvm <provider> <instance-id>\n *Delete a VM:* \ndestroyvm <provider> <instance-id>'
-             
+            // Slack-Flint bot request-body
             body = '{"text":"' + slack_reply_message + '"}'
-
-
-            log.trace("SLACK MESSAGE BODY:" + slack_reply_message)
+            // Slack message
             call.bit('flint-slack:add_message.js')
                 .set('body', body)
                 .set('chat_tool', slack_chat)
@@ -199,6 +187,7 @@ try {
 
     slack_reply_message = 'Hello ' + user_name + '. Something went wrong, please try again ' + error.message.toString()
     // body = '{"channel": "#' + channel_name + '", "username": "FlintBot", "text": "' + slack_reply_message + '"}'
+    // Slack-Flint bot request-body
     body = '{"text": "' + slack_reply_message + '"}'
 
     call.bit('flint-slack:add_message.js')

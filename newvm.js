@@ -36,19 +36,20 @@ try {
     // Check Exit status of 'terraform-test:terraform_provision_machine.rb' Flintbit
     if (aws_provision_response.get('exitcode') == 0) {
 
+        // Getting Instance Details from response of provision.rb
         state = aws_provision_response.get('state')
         key_name = state.get('key_name')                        // key name
         availability_zone = state.get('availability_zone')      // availability zone
-        ami_id = state.get('id')                                // Ami ID ========================= YOU HAVE TO CHECK THE STATE RESPONSE WHICH IS SET IN 
-        log.trace("AMI ID IN NEWVM : ============="+ami_id)
+        ami_id = state.get('id')                                // Ami ID
         public_ip = state.get('public_ip')                      // Public ip
         instance_type = state.get('instance_type')              // instance type
         private_ip = state.get('private_ip')                    // Private IP
 
+        // Bot reply message with all the instance details
         reply_message = 'New virtual machine has been created ' + user_name + '. \n*AWS VM Details:* \n*AMI ID:* ' + ami_id + '\n *Public IP:* ' + public_ip + ' \n*Private IP:* ' + private_ip + ' \nYou can use *' + key_name + '* to access it.'
-        // Slack-Flint bot reply
+        // Slack-Flint bot request body
         body = '{"text": "' + reply_message + '"}'
-        
+
         // Slack-Flint bot reply flintbit
         call.bit('flint-slack:add_message.js')
             .set('body', body)
@@ -60,6 +61,7 @@ try {
 
     } else {
         reply_message = 'Oops! ' + user_name + ', AWS VM creation has failed : *' + aws_provision_response.get('error').toString() + '*'
+        // Slack-Flint bot request body
         body = '{"text": "' + reply_message + '"}'
         call.bit('flint-slack:add_message.js')
             .set('body', body)
@@ -74,7 +76,8 @@ catch (error) {
     log.error(error)
     output.set('exit-code', 1).set('message', error)
 
-    reply_message = 'Hello ' + user_name + ', VM creation failed on ' + provider + ' due to ' + error + ''
+    reply_message = 'Hello ' + user_name + ', virtual machine creation failed on ' + provider + ' due to *' + error + '*'
+    // Slack-Flint bot request body
     body = '{text": "' + reply_message + '"}'
     
     call.bit('flint-slack:add_message.js')
