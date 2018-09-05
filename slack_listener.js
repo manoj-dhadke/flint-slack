@@ -166,10 +166,10 @@ try {
         }
     }
     else {
-        if (provider != "aws") {
-            slack_reply_message = 'Hello ' + user_name + ', please set a valid provider(aws).'
-            log.trace(slack_reply_message)
-        }
+        // if (provider != "aws") {
+        //     slack_reply_message = 'Hello ' + user_name + ', please set a valid provider(aws).'
+        //     log.trace(slack_reply_message)
+        // }
         for (x = 1; x <= command.length; x++) {
             if (command[x] == null || command[x] == '') {
                 // In-case only trigger word is used
