@@ -3,7 +3,7 @@
 ** Summary: This is Slack-Flint bot add message flintbit.
 ** Description: This flintbit is developed to send message to specified Slack .
 **/
-log.info('Started execution of hipchat-terraform:operation:add_message.js flintbit..')
+log.info('Started execution of flint-slack:add_message.js flintbit..')
 
 try {
     // Getting input parameters
@@ -16,7 +16,8 @@ try {
     //headers = config.global('slack-terraform.terraform.http_connector.header')
     url = input.get('url')
 
-    log.info("Flintbit Input Parameters: \nConnector Name:" + http_connector_name + "\n Method:" + method + "\nBody:" + body + "\nHeaders: " + headers)
+    log.info("Flintbit Input Parameters: \nConnector Name:" + http_connector_name + "\n Method:" + method + "\nBody:" + body )
+    //+ "\nHeaders: " + headers
 
     log.info('Calling HTTP connector to notify status')
     connector_response = call.connector(http_connector_name)
@@ -39,4 +40,4 @@ catch (error) {
     output.set('exit-code', 1).set('message', error.message)
     log.error("Catch Error in " + http_connector_name + ", \nMessage: " + error.message)
 }
-log.info("Finished execution of 'hipchat-terraform:operation:add_message.js' flintbit.")
+log.info("Finished execution of 'flint-slack:add_message.js' flintbit.")
