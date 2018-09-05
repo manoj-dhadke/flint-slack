@@ -20,7 +20,7 @@ try {
     secret = config.global('hipchat-terraform.terraform.aws_connector.secret')
     key = config.global('hipchat-terraform.terraform.aws_connector.key')
 
-    log.trace('Calling aws-ec2 Cloud Connector...')
+    log.trace('Calling AWS-EC2 Cloud Connector')
     response = call.connector(connector_aws_name)
                    .set('action', 'start-instances')
                    .set('instance-id', instance_id)
@@ -35,10 +35,12 @@ try {
 
     if (response_exitcode == 0) {
         log.info("Success in executing " + connector_aws_name + " connector where, exitcode : " + response_exitcode + " message :" + response_message)
-        aws_reply_message = 'Hello' + user_name + ', VM started on AWS with ID: ' + instance_id
 
+        aws_reply_message = 'Hello' + user_name + ', VM started on AWS with ID: ' + instance_id
+        body = '{"text": "' + aws_reply_message + '"}'
+        
         call.bit('flint-slack:add_message.js')
-            .set('body', body)
+            .set('body', aws_reply_message)
             .set('chat_tool', chat_toolkit)
             .set('url', url)
             .set('method', method)
@@ -56,7 +58,7 @@ try {
     output.set('exit-code', 1).set('message', error.message)
 
     aws_reply_message = 'Hello ' + user_name + ', VM start Failed on ' + provider + ' with ID ' + instance_id + ' due to ' + error.message + ''
-    body = '{"channel": "#' + channel_name + '", "text": "' + aws_reply_message + '"}'
+    body = '{"text": "' + aws_reply_message + '"}'
 
     call.bit('flint-slack:add_message.js')
         .set('body', body)
