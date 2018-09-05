@@ -27,8 +27,11 @@ try {
         .set('headers', headers)
         .sync()
 
+        log.trace("After connector call")
     response_exitcode = connector_response.exitcode
     response_message = connector_response.message
+
+    
 
     if (response_exitcode == 0)
         log.info("Success in executing " + http_connector_name + ", \nExitcode: " + response_exitcode + "\nMessage: " + response_message)
