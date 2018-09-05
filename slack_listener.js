@@ -7,6 +7,7 @@
 log.trace("Started execution of 'flint-slack:slack_listener.js' flintbit.")
 try {
     key_values = []
+    command_without_trigger = []
     // parse URL encoded data to json
     log.info(input)
     message = input.get('body') // Flint body field to get slack data
