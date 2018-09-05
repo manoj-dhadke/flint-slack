@@ -4,7 +4,7 @@
 ** Description: This flintbit is developed to start vm after .
 **/
 
-log.trace("Started execution of 'hipchat-terraform:operation:startawsvm.rb' flintbit.")
+log.trace("Started execution of 'flint-slack:startawsvm.js' flintbit.")
 
 // Flintbit Input Parameters
 provider = input.get('provider')         // Name of provider (valid inputs : 'aws','digitalocean' etc)
@@ -21,12 +21,12 @@ try {
 
     log.trace('Calling aws-ec2 Cloud Connector...')
     response = call.connector(connector_aws_name)
-        .set('action', 'start-instances')
-        .set('instance-id', instance_id)
-        .set('region', region)
-        .set('access-key', key)
-        .set('security-key', secret)
-        .sync()
+                   .set('action', 'start-instances')
+                   .set('instance-id', instance_id)
+                   .set('region', region)
+                   .set('access-key', key)
+                   .set('security-key', secret)
+                   .sync()
 
     // Amazon EC2 Connector Response Meta Parameters
     response_exitcode = response.exitcode         // Exit status code
@@ -36,7 +36,7 @@ try {
         log.info("Success in executing " + connector_aws_name + " connector where, exitcode : " + response_exitcode + " message :" + response_message)
         aws_reply_message = 'Hello' + user_name + ', VM started on AWS with ID: ' + instance_id
 
-        call.bit('hipchat-terraform:operation:add_message.rb')
+        call.bit('flint-slack:add_message.js')
             .set('body', body)
             .set('chat_tool', chat_toolkit)
             .set('url', url)
@@ -53,13 +53,16 @@ try {
 } catch (error) {
     log.error(error.message)
     output.set('exit-code', 1).set('message', error.message)
-    aws_reply_message = 'Hello ' + user_name + ', VM start Failed on ' + provider + ' with ID ' + instance_id + ' due to ' + error.message + ''
 
+    aws_reply_message = 'Hello ' + user_name + ', VM start Failed on ' + provider + ' with ID ' + instance_id + ' due to ' + error.message + ''
     body = '{"channel": "#' + channel_name + '", "text": "' + aws_reply_message + '"}'
 
-    call.bit('hipchat-terraform:operation:add_message.rb')
+    call.bit('flint-slack:add_message.js')
         .set('body', body)
         .set('chat_tool', chat_toolkit)
+        .set('url', url)
+        .set('method', method)
+        .set('http_connector_name', http_connector_name)
         .sync()
 }
-log.trace("Finished execution of 'hipchat-terraform:operation:startawsvm.js' flintbit.")
+log.trace("Finished execution of 'flint-slack:startawsvm.js' flintbit.")
