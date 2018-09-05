@@ -28,8 +28,8 @@ try {
         .sync()
 
         log.trace("After connector call")
-    response_exitcode = connector_response.exitcode
-    response_message = connector_response.message
+    response_exitcode = connector_response.get("exitcode")
+    response_message = connector_response.message()
 
     log.trace(response_exitcode)
     log.trace(response_message)
