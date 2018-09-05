@@ -10,11 +10,16 @@ try {
     // parse URL encoded data to json
     log.info(input)
     message = input.get('body') // Flint body field to get slack data
-    message_body = message.body.replace(/[\"]/g, '').split('&')
+    log.info(message)
+    message_body = message.replace(/[\"]/g, '').split('&')
+
+    log.trace(message_body)
 
     for (index in message_body) {
         key_values.push(message_body[index].split('='))
     }
+
+    log.trace(key_values)
 
     // Getting slack request variables and putting them in JS variables
     token = key_values[0][1]
