@@ -100,7 +100,7 @@ try {
             .set('http_connector_name', http_connector_name)
             .sync()
         switch (trigger_word) {
-            case 'newvm':
+            case 'flint':
                 provider = command[1]
                 image_type = command[2]
                 instance_type = command[3]
@@ -124,7 +124,7 @@ try {
                     .sync()
                 break;
 
-            case 'flint':
+            case 'startvm':
                 log.trace("CASE FLINT: " + trigger_word + "===" + provider)
                 provider = command[1]
                 instance_id = command[2]
