@@ -39,7 +39,8 @@ try {
     if (response_exitcode == 0) {
         log.info("Success in executing " + connector_aws_name + " connector where, exitcode : " + response_exitcode + " message :" + response_message)
 
-        aws_reply_message = 'Hello' + user_name + ', VM started on AWS with ID: ' + instance_id
+        // Slack message in-case virtual machine is started successfully
+        aws_reply_message = user_name + ', Virtual machine with ID(' + instance_id +') has been successfully started on AWS'
         body = '{"text": "' + aws_reply_message + '"}'
         
         call.bit('flint-slack:add_message.js')

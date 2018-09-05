@@ -162,9 +162,20 @@ try {
     else {
         if(provider != "aws"){
             slack_reply_message = 'Hello '+user_name+', please set a valid provider(aws).'
+            log.trace(slack_reply_message)
         }
         else if(command.length == null || command.length == ''){
+            // In-case only trigger word is used
             slack_reply_message = 'Hello ' + user_name + ', The command is invalid.\n <b>List of Valid Commands:</b> \nAWS VM Creation: newvm <provider> <image-type> <instance-type> <region> <availability-zone> \nStart a VM: startvm <provider> <instance-id>\nStop a VM: stopvm <provider> <instance-id>\n Delete a VM: destroyvm <provider> <instance-id>'
+            body = '{"text":"'+slack_reply_message+'"}'
+
+            call.bit('flint-slack:add_message.js')
+                .set('body', body)
+                .set('chat_tool', slack_chat)
+                .set('url', url)
+                .set('method', method)
+                .set('http_connector_name', http_connector_name)
+                .sync()
         }
     }
 } catch (error) {
