@@ -103,9 +103,10 @@ try {
                     break;
 
             case 'flint':
-                provider = command[0]
-                instance_id = command[1]
-                region = command[2]
+                provider = command[1]
+                instance_id = command[2]
+                region = command[3]
+
                 log.trace('Calling Flintbit to perform startawsvm Operation')
                 call.bit('flint-slack:startawsvm.js')
                     .set('id', id)
