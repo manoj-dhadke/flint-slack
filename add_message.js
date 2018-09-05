@@ -16,8 +16,8 @@ try {
     headers = config.global('slack-terraform.terraform.http_connector.header')
     url = input.get('url')
 
-    log.info("Flintbit Input Parameters: \nConnector Name:" + http_connector_name + "\n Method:" + method + "\nBody:" + body+ "\nHeaders: " + headers )
-    
+    log.info("Flintbit Input Parameters: \nConnector Name:" + http_connector_name + "\n Method:" + method + "\nBody:" + body + "\nHeaders: " + headers)
+
 
     log.info('Calling HTTP connector to notify status')
     connector_response = call.connector(http_connector_name)
@@ -27,19 +27,22 @@ try {
         .set('headers', headers)
         .sync()
 
-        log.trace("After connector call")
-    response_exitcode = connector_response.get("exitcode")
+    log.trace("After connector call")
+    response_exitcode = connector_response.exitcode()
     response_message = connector_response.message()
 
-    log.trace("add_message exit-code:"+response_exitcode)
-    log.trace("add_message response message: "+response_message)
+    log.trace("add_message exit-code:" + response_exitcode)
+    log.trace("add_message response message: " + response_message)
 
-    
 
-    if (response_exitcode == 0)
+
+    if (response_exitcode == 0){
         log.info("Success in executing " + http_connector_name + ", \nExitcode: " + response_exitcode + "\nMessage: " + response_message)
-    else
+        output.set('exit-code', 0)
+    }
+    else{
         log.error("Error in executing " + http_connector_name + ", \nExitcode: " + response_exitcode + "\nMessage: " + response_message)
+    }
 }
 catch (error) {
     log.error(error)
