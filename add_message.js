@@ -31,8 +31,8 @@ try {
     response_exitcode = connector_response.get("exitcode")
     response_message = connector_response.message()
 
-    log.trace(response_exitcode)
-    log.trace(response_message)
+    log.trace("add_message exit-code:"+response_exitcode)
+    log.trace("add_message response message: "+response_message)
 
     
 
@@ -42,8 +42,8 @@ try {
         log.error("Error in executing " + http_connector_name + ", \nExitcode: " + response_exitcode + "\nMessage: " + response_message)
 }
 catch (error) {
-    log.error(error.message)
-    output.set('exit-code', 1).set('message', error.message)
-    log.error("Catch Error in " + http_connector_name + ", \nMessage: " + error.message)
+    log.error(error)
+    output.set('exit-code', 1).set('message', error)
+    log.error("Catch Error in " + http_connector_name + ", \nMessage: " + error)
 }
 log.info("Finished execution of 'flint-slack:add_message.js' flintbit.")
