@@ -30,6 +30,13 @@ try {
     channel_name = key_values[5][1]
     user_id = key_values[7][1]
     user_name = key_values[8][1]
+    user_name = user_name.replace(/[._-]/g,' ').split(' ')
+    // Convert username to a proper format
+    for(x in user_name){
+        user_name[x] = user_name[x].charAt(0).toUpperCase()+user_name[x].substring(1)
+    }
+    user_name = user_name.join(' ')
+    log.trace("Transformed Username : "+user_name)    
     text = key_values[9][1]
     trigger_word = key_values[10][1]
 
