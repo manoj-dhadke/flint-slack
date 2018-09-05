@@ -44,7 +44,7 @@ try {
     command = key_values[9][1].replace(/[+]/g, ' ').split(' ')
 
     // Getting VM details from command
-    //provider = command[0]
+    provider = command[1]
     //image_type = command[1]
     //instance_type = command[2]
     
@@ -84,6 +84,8 @@ try {
         .set('http_connector_name', http_connector_name)
         .sync()
 
+        log.trace("provider"+provider)
+
     // if message_data.length >= 2
     //     provider = message_data[0]
     // image_type = message_data[1]
@@ -110,6 +112,7 @@ try {
                     break;
 
             case 'flint':
+            log.trace("CASE FLINT: "+trigger_word+"==="+provider)
                 provider = command[1]
                 instance_id = command[2]
                 region = command[3]
