@@ -42,7 +42,10 @@ try {
 
     // Command
     command = key_values[9][1].replace(/[+]/g, ' ').split(' ')
-
+    for (x = 1; x <= command.length; x++) {
+        command_without_trigger.push(command[x])
+    }
+    log.trace("COMMAND WITHOUT TRIGGER : " + command_without_trigger)
     // Getting VM details from command
     provider = command[1]
     image_type = command[1]
@@ -170,39 +173,39 @@ try {
         //     slack_reply_message = 'Hello ' + user_name + ', please set a valid provider(aws).'
         //     log.trace(slack_reply_message)
         // }
-        for (x = 1; x <= command.length; x++) {
-            if (command[x] == null || command[x] == '') {
-                // In-case only trigger word is used
-                slack_reply_message = user_name + ', the command is invalid.\n <b>List of Valid Commands:</b> \nAWS VM Creation: newvm <provider> <image-type> <instance-type> <region> <availability-zone> \nStart a VM: startvm <provider> <instance-id>\nStop a VM: stopvm <provider> <instance-id>\n Delete a VM: destroyvm <provider> <instance-id>'
-                body = '{"text":"' + slack_reply_message + '"}'
-                break;
-            }
-                log.trace("SLACK MESSAGE BODY:"+slack_reply_message)
-                call.bit('flint-slack:add_message.js')
-                    .set('body', body)
-                    .set('chat_tool', slack_chat)
-                    .set('url', url)
-                    .set('method', method)
-                    .set('http_connector_name', http_connector_name)
-                    .sync()
-            }
+
+        if (command_without_trigger.length == null || command_without_trigger == '') {
+            // In-case only trigger word is used
+            slack_reply_message = user_name + ', the command is invalid.\n <b>List of Valid Commands:</b> \nAWS VM Creation: newvm <provider> <image-type> <instance-type> <region> <availability-zone> \nStart a VM: startvm <provider> <instance-id>\nStop a VM: stopvm <provider> <instance-id>\n Delete a VM: destroyvm <provider> <instance-id>'
+            body = '{"text":"' + slack_reply_message + '"}'
+
+
+            log.trace("SLACK MESSAGE BODY:" + slack_reply_message)
+            call.bit('flint-slack:add_message.js')
+                .set('body', body)
+                .set('chat_tool', slack_chat)
+                .set('url', url)
+                .set('method', method)
+                .set('http_connector_name', http_connector_name)
+                .sync()
         }
-    } catch (error) {
-        log.error(error.message)
-        output.set('exit-code', 1).set('message', error.message)
-
-        slack_reply_message = 'Hello ' + user_name + '. Something went wrong, please try again ' + error.message.toString()
-        // body = '{"channel": "#' + channel_name + '", "username": "FlintBot", "text": "' + slack_reply_message + '"}'
-        body = '{"text": "' + slack_reply_message + '"}'
-
-        call.bit('flint-slack:add_message.js')
-            .set('body', body)
-            .set('chat_tool', slack_chat)
-            .set('url', url)
-            .set('method', method)
-            .set('http_connector_name', http_connector_name)
-            .sync()
-
     }
+} catch (error) {
+    log.error(error.message)
+    output.set('exit-code', 1).set('message', error.message)
 
-    log.trace("Finished execution of 'flint-slack:slack_listener.js' flintbit.")
+    slack_reply_message = 'Hello ' + user_name + '. Something went wrong, please try again ' + error.message.toString()
+    // body = '{"channel": "#' + channel_name + '", "username": "FlintBot", "text": "' + slack_reply_message + '"}'
+    body = '{"text": "' + slack_reply_message + '"}'
+
+    call.bit('flint-slack:add_message.js')
+        .set('body', body)
+        .set('chat_tool', slack_chat)
+        .set('url', url)
+        .set('method', method)
+        .set('http_connector_name', http_connector_name)
+        .sync()
+
+}
+
+log.trace("Finished execution of 'flint-slack:slack_listener.js' flintbit.")
