@@ -75,7 +75,7 @@ try {
     // Initial notification to slack from FlintBot
     //http_body = '{"channel": "#' + channel_name + '", "username": "FlintBot", "text": "Hello ' + user_name + ', I got your request and started processing it"}'
 
-    acknowledgement_body = '{"text": "Hello ' + user_name + '. I got your request and started processing it"}'
+    acknowledgement_body = '{"text": "Hello, ' + user_name + '. I\'ve got your request and I\'m processing it."}'
     call.bit('flint-slack:add_message.js')
         .set('body', acknowledgement_body)
         .set('chat_tool', slack_chat)
@@ -171,7 +171,7 @@ try {
 
     slack_reply_message = 'Hello ' + user_name + '. Something went wrong, please try again ' + error.message.toString()
     // body = '{"channel": "#' + channel_name + '", "username": "FlintBot", "text": "' + slack_reply_message + '"}'
-    body = '{"channel": "#' + channel_name + '", "text": "' + slack_reply_message + '"}'
+    body = '{"text": "' + slack_reply_message + '"}'
     
     call.bit('flint-slack:add_message.js')
         .set('body', body)

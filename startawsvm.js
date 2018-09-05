@@ -43,7 +43,7 @@ try {
         body = '{"text": "' + aws_reply_message + '"}'
         
         call.bit('flint-slack:add_message.js')
-            .set('body', aws_reply_message)
+            .set('body', body)
             .set('chat_tool', chat_toolkit)
             .set('url', url)
             .set('method', method)
