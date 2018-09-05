@@ -144,8 +144,8 @@ try {
         if(provider != "aws"){
             slack_reply_message = 'Hello '+user_name+', please set a valid provider(aws).'
         }
-        else if(command.length < 5){
-            slack_reply_message = 'Hello ' + user_name + ', The command has missing parameters.\n <b>Syntax:</b> \n<provider> <image-type> <instance-type> <region> <availability-zone>'
+        else if(command.length == null || command.length == ''){
+            slack_reply_message = 'Hello ' + user_name + ', The command is invalid.\n <b>List of Valid Commands:</b> \nAWS VM Creation: newvm <provider> <image-type> <instance-type> <region> <availability-zone> \nStart a VM: startvm <provider> <instance-id>\nStop a VM: stopvm <provider> <instance-id>\n Delete a VM: destroyvm <provider> <instance-id>'
         }
     }
 } catch (error) {
