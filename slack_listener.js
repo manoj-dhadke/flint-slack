@@ -125,6 +125,7 @@ try {
                     .set('chat_tool', slack_chat)
                     .set('region', region)
                     .set('user_name', user_name)
+                    .set('url', url)
                     .sync()
                     break;
 
