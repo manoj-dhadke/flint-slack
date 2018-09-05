@@ -37,14 +37,15 @@ try {
     command = key_values[9][1].replace(/[+]/g, ' ').split(' ')
 
     // Getting VM details from command
-    provider = command[0]
-    image_type = command[1]
-    instance_type = command[2]
-    region = command[3]
-    availability_zone = command[4]
+    //provider = command[0]
+    //image_type = command[1]
+    //instance_type = command[2]
+    
+    //availability_zone = command[4]
 
     slack_chat = 'slack'
     id = token
+    
 
     // Inputs: Service config->slack_listener.js->add_message.js
     // url = input.get('url')  // #demo on Slack url
@@ -83,8 +84,8 @@ try {
     // region = message_data[3]
     // availability_zone = message_data[4]
 
-    if (command != null || command != '' && provider == "aws") {
-        switch (command) {
+    if (command.length != 0 && provider == "aws") {
+        switch (trigger_word) {
             case 'newvm':
                 log.trace('Calling Flintbit to perform newvm Operation')
                 call.bit('flint-slack:newvm.js')
@@ -101,14 +102,17 @@ try {
                     .sync()
                     break;
 
-            case 'startvm':
+            case 'flint':
+                provider = command[0]
+                instance_id = command[1]
+                region = command[2]
                 log.trace('Calling Flintbit to perform startawsvm Operation')
-                call.bit('hipchat-terraform:operation:startawsvm.rb')
+                call.bit('flint-slack:startawsvm.js')
                     .set('id', id)
-                    .set('instance_id', image_type)
+                    .set('instance_id', instance_id)
                     .set('provider', provider)
                     .set('chat_tool', slack_chat)
-                    .set('region', instance_type)
+                    .set('region', region)
                     .set('user_name', user_name)
                     .sync()
                     break;
