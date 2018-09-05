@@ -126,6 +126,8 @@ try {
                     .set('region', region)
                     .set('user_name', user_name)
                     .set('url', url)
+                    .set('method', method)
+                    .set('http_connector_name', http_connector_name)
                     .sync()
                     break;
 

@@ -14,7 +14,10 @@ chat_toolkit = input.get('chat_tool')    // Chat tool name (Valid inputs : 'hipc
 user_name = input.get('user_name')       // Name of chat tool user
 region = input.get('region')             // Region in which instance present
 url = input.get('url')
+method = input.get('method')
+http_connector_name = input.get('http_connector_name')
 log.trace(input)
+
 try {
     connector_aws_name = config.global('hipchat-terraform.terraform.aws_connector.name')
     secret = config.global('hipchat-terraform.terraform.aws_connector.secret')
@@ -51,13 +54,13 @@ try {
         log.error("ERROR in executing" + connector_aws_name + "\nExitcode : " + response_exitcode + "\n Message : " + response_message)
         response_message.toString().replace(/[!%&"]/, '')
         log.info('Start ' + response_message.toString())
-        aws_reply_message = 'Hello ' + user_name + ', VM start Failed on AWS with ID: ' + instance_id + ' due to ' + response_message.toString() + ''
+        aws_reply_message = 'Hello ' + user_name + ', VM start failed on AWS with ID: ' + instance_id + ' due to ' + response_message.toString() + ''
     }
 } catch (error) {
     log.error(error.message)
     output.set('exit-code', 1).set('message', error.message)
 
-    aws_reply_message = 'Hello ' + user_name + ', VM start Failed on ' + provider + ' with ID ' + instance_id + ' due to ' + error.message + ''
+    aws_reply_message = 'Hello ' + user_name + ', VM start failed on ' + provider.toUpperCase() + ' with ID ' + instance_id + ' due to ' + error.message + ''
     body = '{"text": "' + aws_reply_message + '"}'
 
     call.bit('flint-slack:add_message.js')
