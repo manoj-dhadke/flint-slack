@@ -79,14 +79,7 @@ try {
     // Initial notification to slack from FlintBot
     //http_body = '{"channel": "#' + channel_name + '", "username": "FlintBot", "text": "Hello ' + user_name + ', I got your request and started processing it"}'
 
-    acknowledgement_body = '{"text": "Hello, ' + user_name + '. I\'ve got your request and I\'m processing it."}'
-    call.bit('flint-slack:add_message.js')
-        .set('body', acknowledgement_body)
-        .set('chat_tool', slack_chat)
-        .set('url', url)
-        .set('method', method)
-        .set('http_connector_name', http_connector_name)
-        .sync()
+    
 
     log.trace("provider" + provider)
 
@@ -98,6 +91,14 @@ try {
     // availability_zone = message_data[4]
 
     if (command.length != 0 && provider == "aws") {
+        acknowledgement_body = '{"text": "Hello, ' + user_name + '. I\'ve got your request and I\'m processing it."}'
+        call.bit('flint-slack:add_message.js')
+            .set('body', acknowledgement_body)
+            .set('chat_tool', slack_chat)
+            .set('url', url)
+            .set('method', method)
+            .set('http_connector_name', http_connector_name)
+            .sync()
         switch (trigger_word) {
             case 'newvm':
                 provider = command[1]
@@ -177,7 +178,7 @@ try {
 
         if (command_without_trigger.length == null || command_without_trigger == '') {
             // In-case only trigger word is used
-            slack_reply_message = user_name + ', the command is invalid.\n <b>List of Valid Commands:</b> \nAWS VM Creation: newvm <provider> <image-type> <instance-type> <region> <availability-zone> \nStart a VM: startvm <provider> <instance-id>\nStop a VM: stopvm <provider> <instance-id>\n Delete a VM: destroyvm <provider> <instance-id>'
+            slack_reply_message = user_name + ', the command is invalid.\n List of Valid Commands: \nAWS VM Creation: \nnewvm <provider> <image-type> <instance-type> <region> <availability-zone> \nStart a VM: \nstartvm <provider> <instance-id>\nStop a VM: \nstopvm <provider> <instance-id>\n Delete a VM: \ndestroyvm <provider> <instance-id>'
             body = '{"text":"' + slack_reply_message + '"}'
 
 
