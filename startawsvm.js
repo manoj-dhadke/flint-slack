@@ -40,11 +40,12 @@ try {
         log.info("Success in executing " + connector_aws_name + " connector where, exitcode : " + response_exitcode + " message :" + response_message)
 
         // Slack message in-case virtual machine is started successfully
-        aws_reply_message = user_name + ', virtual machine with ID(' + instance_id +') has been successfully started on AWS'
-        attachments = '"fallback": "Virtual machine start notification","color": "#36a64e","title": "Started Virtual Machine.","text": "'+user_name + '", virtual machine with ID(' + instance_id +') has been successfully started on AWS", "footer": "Flint","ts": 123456789'
+        aws_reply_message = user_name + ', virtual machine with ID(*' + instance_id +'*) has been successfully started on AWS'
+        //attachments = '"fallback": "Virtual machine start notification","color": "#36a64e","title": "Started Virtual Machine.","text": "'+user_name + ', virtual machine with ID(' + instance_id +') has been successfully started on AWS", "footer": "Flint","ts": 123456789'
 
+        aws_reply_message = '{"text": "' + aws_reply_message + '"}'
         body =  '{"attachments":"[{'+attachments+'}]"}'     
-        //'{"text": "' + aws_reply_message + '"',
+        
         call.bit('flint-slack:add_message.js')
             .set('body', body)
             .set('chat_tool', chat_toolkit)

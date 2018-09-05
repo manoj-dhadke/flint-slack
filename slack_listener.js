@@ -178,7 +178,7 @@ try {
 
         if (command_without_trigger.length == null || command_without_trigger == '') {
             // In-case only trigger word is used
-            slack_reply_message = user_name + ', the command is invalid.\n List of Valid Commands: \nAWS VM Creation: \nnewvm <provider> <image-type> <instance-type> <region> <availability-zone> \nStart a VM: \nstartvm <provider> <instance-id>\nStop a VM: \nstopvm <provider> <instance-id>\n Delete a VM: \ndestroyvm <provider> <instance-id>'
+            slack_reply_message = user_name + ', this command is invalid.\n *List of Valid Commands:* \n*AWS VM Creation:* \nnewvm <provider> <image-type> <instance-type> <region> <availability-zone> \n*Start a VM:* \nstartvm <provider> <instance-id>\n*Stop a VM:* \nstopvm <provider> <instance-id>\n *Delete a VM:* \ndestroyvm <provider> <instance-id>'
              
             body = '{"text":"' + slack_reply_message + '"}'
 
