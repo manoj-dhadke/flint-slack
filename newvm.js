@@ -48,7 +48,7 @@ try {
         // Slack-Flint bot reply
         body = '{"text": "' + reply_message + '"}'
         // Slack-Flint bot reply flintbit
-        call.bit('hipchat-terraform:operation:add_message.rb')
+        call.bit('flint-slack:add_message.js')
             .set('body', body)
             .set('chat_tool', chat_tool_name)
             .set('url', url)
@@ -59,7 +59,7 @@ try {
     } else {
         reply_message = 'Oops! ' + user_name + ', AWS VM creation has failed : *' + aws_provision_response.get('error').toString() + '*'
         body = '{"text": "' + reply_message + '"}'
-        call.bit('hipchat-terraform:operation:add_message.rb')
+        call.bit('flint-slack:add_message.js')
             .set('body', body)
             .set('chat_tool', chat_tool_name)
             .set('url', url)
@@ -75,7 +75,7 @@ catch (error) {
     reply_message = 'Hello ' + user_name + ', VM creation failed on ' + provider + ' due to ' + error + ''
     body = '{text": "' + reply_message + '"}'
     
-    call.bit('hipchat-terraform:operation:add_message.rb')
+    call.bit('flint-slack:add_message.js')
         .set('body', body)
         .set('chat_tool', chat_tool_name)
         .set('url', url)
