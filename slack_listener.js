@@ -98,16 +98,18 @@ try {
             case 'newvm':
                 log.trace('Calling Flintbit to perform newvm Operation')
                 call.bit('flint-slack:newvm.js')
-                    .set('id', id)
-                    .set('image_type', image_type)
-                    .set('channel_name', channel_name)
                     .set('provider', provider)
+                    .set('image_type', image_type)
                     .set('instance_type', instance_type)
-                    .set('channel_name', channel_name)
-                    .set('availability_zone', availability_zone)
-                    .set('chat_tool', slack_chat)
                     .set('region', region)
+                    .set('availability_zone', availability_zone)
+                    .set('id', id)
                     .set('user_name', user_name)
+                    .set('chat_tool', slack_chat)
+                    .set('channel_name', channel_name)
+                    .set('url', url)
+                    .set('method', method)
+                    .set('http_connector_name', http_connector_name)
                     .sync()
                     break;
 
@@ -180,6 +182,7 @@ try {
         .set('method', method)
         .set('http_connector_name', http_connector_name)
         .sync()
+    
 }
 
 log.trace("Finished execution of 'flint-slack:slack_listener.js' flintbit.")
