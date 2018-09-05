@@ -4,10 +4,11 @@
 ** Description: This flintbit is developed to listen to slack messages/responses containing Flint triggers-words.
 **/
 
-log.trace("Started execution of 'example:slack_listener.js' flintbit.")
+log.trace("Started execution of 'flint-slack:slack_listener.js' flintbit.")
 try {
     key_values = []
     // parse URL encoded data to json
+    log.info(input)
     message = input.get('body') // Flint body field to get slack data
     message_body = message.body.replace(/[\"]/g, '').split('&')
 
@@ -41,10 +42,14 @@ try {
     id = token
 
     // Inputs: Service config->slack_listener.js->add_message.js
-    
-    url = input.get('url')  // #demo on Slack url
-    http_connector_name = input.get('http_connector_name')
-    method = input.get('method')
+    // url = input.get('url')  // #demo on Slack url
+    // http_connector_name = input.get('http_connector_name')
+    // method = input.get('method')
+
+    // TOD Inputs
+    url = "https://hooks.slack.com/services/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"
+    method = 'post'
+    http_connector_name = "http"
 
     // // Getting values from slack data
     // body = message_body['text'][0].delete '"'
@@ -59,7 +64,7 @@ try {
 
     acknowledgement_body = '{"channel": "#' + channel_name + '", "text": "Hello ' + user_name + ',. I got your request and started processing it"}'
 
-    call.bit('hipchat-terraform:operation:add_message.js')
+    call.bit('flint-slack:add_message.js')
         .set('body', acknowledgement_body)
         .set('chat_tool', slack_chat)
         .set('url', url)
@@ -78,7 +83,7 @@ try {
         switch (command) {
             case 'newvm':
                 log.trace('Calling Flintbit to perform newvm Operation')
-                call.bit('hipchat-terraform:operation:newvm.rb')
+                call.bit('flint-slack:newvm.js')
                     .set('id', id)
                     .set('image_type', image_type)
                     .set('channel_name', channel_name)
@@ -146,7 +151,7 @@ try {
     // body = '{"channel": "#' + channel_name + '", "username": "FlintBot", "text": "' + slack_reply_message + '"}'
     body = '{"channel": "#' + channel_name + '", "text": "' + slack_reply_message + '"}'
     
-    call.bit('hipchat-terraform:operation:add_message.js')
+    call.bit('flint-slack:add_message.js')
         .set('body', body)
         .set('chat_tool', slack_chat)
         .set('url', url)
@@ -155,4 +160,4 @@ try {
         .sync()
 }
 
-log.trace("Finished execution of 'example:slack_listener.js' flintbit.")
+log.trace("Finished execution of 'flint-slack:slack_listener.js' flintbit.")
