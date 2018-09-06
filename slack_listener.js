@@ -47,7 +47,10 @@ try {
         command_without_trigger.push(command[x])
     }
     log.trace("COMMAND WITHOUT TRIGGER : " + command_without_trigger)
-    provider = command[1]
+
+    action = command[1]         // Either createvm, startvm, stopvm or destroyvm
+    provider = command[2]
+
     slack_chat = 'slack'
     id = token
 
@@ -65,7 +68,7 @@ try {
 
     log.trace("provider" + provider)
 
-    if (command.length != 0 && provider == "aws") {
+    if (command_without_trigger.length != 0 && provider == "aws") {
         // Slack-Flint bot request-body for acknowledgement
         acknowledgement_body = '{"text": "Hello, ' + user_name + '. I\'ve got your request and I\'m processing it."}'
         call.bit('flint-slack:add_message.js')
@@ -76,13 +79,12 @@ try {
             .set('http_connector_name', http_connector_name)
             .sync()
 
-        switch (trigger_word) {
+        switch (action) {
             case 'newvm':
-                provider = command[1]
-                image_type = command[2]
-                instance_type = command[3]
-                region = command[4]
-                availability_zone = command[5]
+                image_type = command[3]
+                instance_type = command[4]
+                region = command[5]
+                availability_zone = command[6]
 
                 log.trace('Calling Flintbit to perform newvm Operation')
                 call.bit('flint-slack:newvm.js')
@@ -102,10 +104,8 @@ try {
                 break;
 
             case 'startvm':
-                log.trace("CASE FLINT: " + trigger_word + "===" + provider)
-                provider = command[1]
-                instance_id = command[2]
-                region = command[3]
+                instance_id = command[3]
+                region = command[4]
 
                 log.trace('Calling Flintbit to perform startawsvm Operation')
                 call.bit('flint-slack:startawsvm.js')
@@ -123,10 +123,8 @@ try {
 
             case 'stopvm':
                 log.trace('Calling Flintbit to perform stopawsvm Operation')
-
-                provider = command[1]
-                instance_id = command[2]
-                region = command[3]
+                instance_id = command[3]
+                region = command[4]
 
                 call.bit('flint-slack:stopawsvm.js')
                     .set('id', id)
@@ -141,11 +139,9 @@ try {
                     .sync()
                 break;
 
-            case 'flint':
-
-                provider = command[1]
-                instance_id = command[2]
-                region = command[3]
+            case 'destroyvm':
+                instance_id = command[3]
+                region = command[4]
 
                 call.bit('flint-slack:destroyvm.js')
                     .set('id', id)
@@ -169,7 +165,7 @@ try {
 
         if (command_without_trigger.length == null || command_without_trigger == '') {
             // In-case only trigger word is used, all valid commands will be listed
-            slack_reply_message = user_name + ', this command is invalid.\n *List of Valid Commands:* \n*AWS VM Creation:* \nnewvm <provider> <image-type> <instance-type> <region> <availability-zone> \n*Start a VM:* \nstartvm <provider> <instance-id>\n*Stop a VM:* \nstopvm <provider> <instance-id>\n *Delete a VM:* \ndestroyvm <provider> <instance-id>'
+            slack_reply_message = user_name + ', this command is invalid.\n *List of Valid Commands:* \n*AWS VM Creation:* \nflint newvm <provider> <image-type> <instance-type> <region> <availability-zone> \n*Start a VM:* \nflint startvm <provider> <instance-id>\n*Stop a VM:* \nflint stopvm <provider> <instance-id>\n *Delete a VM:* \nflint destroyvm <provider> <instance-id>'
             // Slack-Flint bot request-body
             body = '{"text":"' + slack_reply_message + '"}'
             // Slack message
