@@ -37,7 +37,8 @@ try {
         user_name[x] = user_name[x].charAt(0).toUpperCase() + user_name[x].substring(1)
     }
     user_name = user_name.join(' ')
-    log.trace("Transformed Username : " + user_name)
+    user_split = user_name.split(' ')   // Split first and last name, we can use first name
+
     text = key_values[9][1]
     trigger_word = key_values[10][1]
 
@@ -48,12 +49,12 @@ try {
     }
     log.trace("COMMAND WITHOUT TRIGGER : " + command_without_trigger)
 
-    action = command[1]         // Either createvm, startvm, stopvm or destroyvm
+    // Switch case on this action
+    action = command[1]         // Actions: createvm, startvm, stopvm or destroyvm
     provider = command[2]
 
     slack_chat = 'slack'
     id = token
-
 
     // Inputs: Service config->slack_listener.js->add_message.js
     // url = input.get('url')  // #demo on Slack url
@@ -65,12 +66,16 @@ try {
     method = 'post'
     http_connector_name = "http"
 
-
     log.trace("provider" + provider)
+    
+    // Get current time and set greeting message accordingly
+    currentDate = new Date()
+    currentHour = currentDate.getHours()
+    log.trace("HOUR IS ==============> "+currentHour)
 
     if (command_without_trigger.length != 0 && provider == "aws") {
         // Slack-Flint bot request-body for acknowledgement
-        acknowledgement_body = '{"text": "Hello, ' + user_name + '. I\'ve got your request and I\'m processing it."}'
+        acknowledgement_body = '{"text": "Hello, ' + user_split[0]+ '. I\'ve got your request and I\'m processing it."}'
         call.bit('flint-slack:add_message.js')
             .set('body', acknowledgement_body)
             .set('chat_tool', slack_chat)
@@ -158,17 +163,14 @@ try {
         }
     }
     else {
-        // if (provider != "aws") {
-        //     slack_reply_message = 'Hello ' + user_name + ', please set a valid provider(aws).'
-        //     log.trace(slack_reply_message)
-        // }
+        if (command_without_trigger.length == 0 || command_without_trigger == '') {
 
-        if (command_without_trigger.length == null || command_without_trigger == '') {
             // In-case only trigger word is used, all valid commands will be listed
             slack_reply_message = user_name + ', this command is invalid.\n *List of Valid Commands:* \n*AWS VM Creation:* \nflint newvm <provider> <image-type> <instance-type> <region> <availability-zone> \n*Start a VM:* \nflint startvm <provider> <instance-id>\n*Stop a VM:* \nflint stopvm <provider> <instance-id>\n *Delete a VM:* \nflint destroyvm <provider> <instance-id>'
             // Slack-Flint bot request-body
             body = '{"text":"' + slack_reply_message + '"}'
-            // Slack message
+
+            // Send Slack message
             call.bit('flint-slack:add_message.js')
                 .set('body', body)
                 .set('chat_tool', slack_chat)
