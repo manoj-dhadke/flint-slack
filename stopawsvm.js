@@ -38,14 +38,19 @@ try {
     response_exitcode = response.exitcode()              	          // Exit status code
     response_message = response.message()                           // Execution status messages
 
+    // Success in stopping VM
     if (response_exitcode == 0) {
         output.set('exit-code', response_exitcode)
 
         log.info("Exit-code: "+response_exitcode)
         log.info("Response message: "+response_message)
         
+        // Define slack reply
+        attachments = ['{"fallback":"Virtual machine start notification","color":"#36a64e","title":"Started Virtual Machine.","text":"'+user_split[0]+', AWS virtual machine with ID() has been successfully started.","footer":"Flint","ts":123456789}']
+
         aws_reply_message = 'Hi, ' + user_name + ', requested VM instance with ID(*'+instance_id+'*) has been successfully stopped on AWS.'
-        body = '{"text": "'+aws_reply_message+'"}'
+        body = '{"text": "'+aws_reply_message+'", "attachments": "'+attachments+'"}'
+        // Send slack reply
         call.bit('flint-slack:add_message.js')
             .set('body', body)
             .set('chat_tool', chat_toolkit)
@@ -55,11 +60,13 @@ try {
             .sync()
 
     } else {
+        // Failure in stopping VM
         log.error("ERROR: \nExitcode : "+response_exitcode+" \nMessage : "+response_message)
 
         response_message.replace(/[!%&"]/, '')
         aws_reply_message = 'Oops! ' + user_name + ', VM failed to stop on AWS with ID(*' + instance_id + '*) due to ' + response_message.toString() + ''
     }
+    // Exception-handling
 } catch (error) {
     log.error(error)
     output.set('exit-code', 1).set('message', error)
