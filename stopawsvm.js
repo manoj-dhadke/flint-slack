@@ -47,9 +47,9 @@ try {
         log.info("Response message: "+response_message)
         
         // Define slack reply
-        attachments = ['{"fallback":"Virtual machine start notification","color":"#36a64e","title":"Started Virtual Machine.","text":"'+user_split[0]+', AWS virtual machine with ID() has been successfully started.","footer":"Flint","ts":123456789}']
+        attachments = '[{"fallback":"Virtual machine start notification","color":"#36a64e","title":"Started Virtual Machine.","text":"'+user_split[0]+', AWS virtual machine with ID() has been successfully started.","footer":"Flint","ts":123456789}]'
 
-        aws_reply_message = 'Hi, ' + user_name + ', requested VM instance with ID(*'+instance_id+'*) has been successfully stopped on AWS.'
+        aws_reply_message = 'Hi, ' + user_split[0] + ', requested VM instance with ID(*'+instance_id+'*) has been successfully stopped on AWS.'
         body = '{"text": "'+aws_reply_message+'", "attachments": "'+attachments+'"}'
         // Send slack reply
         call.bit('flint-slack:add_message.js')
