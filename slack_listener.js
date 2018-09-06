@@ -178,7 +178,9 @@ try {
             // In-case only trigger word is used, all valid commands will be listed
             slack_reply_message = user_name + ', this command is invalid.\n *List of Valid Commands:* \n*AWS VM Creation:* \nflint newvm <provider> <image-type> <instance-type> <region> <availability-zone> \n*Start a VM:* \nflint startvm <provider> <instance-id>\n*Stop a VM:* \nflint stopvm <provider> <instance-id>\n *Delete a VM:* \nflint destroyvm <provider> <instance-id>'
             // Slack-Flint bot request-body
-            body = '{"text":"' + slack_reply_message + '"}'
+            dateObj = new Date()
+            timestamp = Math.floor(dateObj.getTime()/1000)
+            body = '{"attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"'+user_split[0]+', '+slack_reply_message+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
 
             // Send Slack message
             call.bit('flint-slack:add_message.js')
