@@ -121,8 +121,9 @@ try {
                     .sync()
                 break;
 
-            case 'flint':
+            case 'stopvm':
                 log.trace('Calling Flintbit to perform stopawsvm Operation')
+
                 provider = command[1]
                 instance_id = command[2]
                 region = command[3]
@@ -140,14 +141,17 @@ try {
                     .sync()
                 break;
 
-            case 'destroyvm':
-                call.bit('hipchat-terraform:operation:destroyvm.rb')
+            case 'flint':
+
+                provider = command[1]
+                instance_id = command[2]
+                region = command[3]
+
+                call.bit('flint-slack:destroyvm.js')
                     .set('id', id)
-                    .set('region', instance_type)
+                    .set('region', region)
                     .set('provider', provider)
-                    .set('operation', command)
-                    .set('channel_name', channel_name)
-                    .set('instance_id', image_type)
+                    .set('instance_id', instance_id)
                     .set('chat_tool', slack_chat)
                     .set('user_name', user_name)
                     .set('url', url)
