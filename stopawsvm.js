@@ -51,8 +51,6 @@ try {
        var attachments = '{"fallback":"Virtual machine start notification","color":"#36a64e","fields":[{"title":"Started Virtual Machine.","value":"'+user_split[0]+', virtual machine with ID(*'+instance_id+'*) has been successfully started.","short":false}],"footer":"Flint"}'
        log.trace('1'+attachments)
 
-        //var obj=JSON.parse('jsn',attachments);
-        log.trace('2'+obj)
         //log.trace('7'+ JSON.stringify(obj))
 
 
