@@ -180,7 +180,7 @@ try {
             // Slack-Flint bot request-body
             dateObj = new Date()
             timestamp = Math.floor(dateObj.getTime()/1000)
-            body = '{"text":"Hi, '+user_split[0]+'.", attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"'+slack_reply_message+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
+            body = '{"text":"Hi, '+user_split[0]+'.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"'+slack_reply_message+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
 
             // Send Slack message
             call.bit('flint-slack:add_message.js')
