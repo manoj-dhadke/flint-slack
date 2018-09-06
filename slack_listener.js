@@ -47,13 +47,7 @@ try {
         command_without_trigger.push(command[x])
     }
     log.trace("COMMAND WITHOUT TRIGGER : " + command_without_trigger)
-    // Getting VM details from command
     provider = command[1]
-    image_type = command[2]
-    instance_type = command[3]
-
-    availability_zone = command[4]
-
     slack_chat = 'slack'
     id = token
 
@@ -68,13 +62,6 @@ try {
     method = 'post'
     http_connector_name = "http"
 
-    // // Getting values from slack data
-    // body = message_body['text'][0].delete '"'
-    // command = message_body['command'][0]
-    // channel_name = message_body['channel_name'][0]
-    // user_name = message_body['user_name'][0]
-    // id = message_body['"token'][0]
-    // message_data = body.split(' ')
 
     log.trace("provider" + provider)
 
@@ -90,7 +77,7 @@ try {
             .sync()
 
         switch (trigger_word) {
-            case 'flint':
+            case 'newvm':
                 provider = command[1]
                 image_type = command[2]
                 instance_type = command[3]
@@ -134,15 +121,22 @@ try {
                     .sync()
                 break;
 
-            case 'stopvm':
+            case 'flint':
                 log.trace('Calling Flintbit to perform stopawsvm Operation')
-                call.bit('hipchat-terraform:operation:stopawsvm.rb')
+                provider = command[1]
+                instance_id = command[2]
+                region = command[3]
+
+                call.bit('flint-slack:stopawsvm.js')
                     .set('id', id)
-                    .set('instance_id', image_type)
+                    .set('instance_id', instance_id)
                     .set('provider', provider)
                     .set('chat_tool', slack_chat)
-                    .set('region', instance_type)
+                    .set('region', region)
                     .set('user_name', user_name)
+                    .set('url', url)
+                    .set('method', method)
+                    .set('http_connector_name', http_connector_name)
                     .sync()
                 break;
 
@@ -156,6 +150,9 @@ try {
                     .set('instance_id', image_type)
                     .set('chat_tool', slack_chat)
                     .set('user_name', user_name)
+                    .set('url', url)
+                    .set('method', method)
+                    .set('http_connector_name', http_connector_name)
                     .sync()
                 break;
         }
