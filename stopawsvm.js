@@ -56,7 +56,7 @@ try {
 
         //aws_reply_message = 'Hi, ' + user_split[0] + ', requested VM instance with ID(*'+instance_id+'*) has been successfully stopped on AWS.'
         //body = '{"text": "'+attachments+'"}'
-        body = '{"text": {"fallback":"Virtual machine start notification","color":"#36a64e","fields":[{"title":"Started Virtual Machine.","value":"Akash, virtual machine with ID(*i-0b46b5ccdc61f9bc8*) has been successfully started.","short":false}],"footer":"Flint"}}'
+        body = '{"attachments": "[{"fallback":"Virtual machine start notification","color":"#36a64e","fields":[{"title":"Started Virtual Machine.","value":"Akash, virtual machine with ID(*i-0b46b5ccdc61f9bc8*) has been successfully started.","short":false}],"footer":"Flint"}]"}'
         // Send slack reply
 
         log.trace('BODY'+body)
