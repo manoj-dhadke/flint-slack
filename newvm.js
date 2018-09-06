@@ -14,6 +14,8 @@ try {
     availability_zone = input.get('availability_zone') // Availability zone with respect to region
     token_id = input.get('id')            // SlackToken ID
     user_name = input.get('user_name')                  // Name of chat tool user
+    user_split = user_name.split(' ')
+
     chat_tool_name = input.get('chat_tool')            // Chat tool name (Valid inputs : 'hipchat','slack')
     channel_name = input.get('channel_name')           // Name of slack channel
 
@@ -46,7 +48,7 @@ try {
         private_ip = state.get('private_ip')                    // Private IP
 
         // Bot reply message with all the instance details
-        reply_message = 'New virtual machine has been created ' + user_name + '. \n*AWS VM Details:* \n*AMI ID:* ' + ami_id + '\n *Public IP:* ' + public_ip + ' \n*Private IP:* ' + private_ip + ' \nYou can use *' + key_name + '* to access it.'
+        reply_message = 'New virtual machine has been created ' + user_split[0] + '. \n*AWS VM Details:* \n*AMI ID:* ' + ami_id + '\n *Public IP:* ' + public_ip + ' \n*Private IP:* ' + private_ip + ' \nYou can use *' + key_name + '* to access it.'
         // Slack-Flint bot request body
         body = '{"text": "' + reply_message + '"}'
 
@@ -60,7 +62,7 @@ try {
             .sync()
 
     } else {
-        reply_message = 'Oops! ' + user_name + ', AWS VM creation has failed : *' + aws_provision_response.get('error').toString() + '*'
+        reply_message = 'Oops! ' + user_split[0] + ', AWS VM creation has failed : *' + aws_provision_response.get('error').toString() + '*'
         // Slack-Flint bot request body
         body = '{"text": "' + reply_message + '"}'
         call.bit('flint-slack:add_message.js')
@@ -76,7 +78,7 @@ catch (error) {
     log.error(error)
     output.set('exit-code', 1).set('message', error)
 
-    reply_message = 'Hello ' + user_name + ', virtual machine creation failed on ' + provider + ' due to *' + error + '*'
+    reply_message = 'Hello ' + user_split[0] + ', virtual machine creation failed on ' + provider + ' due to *' + error + '*'
     // Slack-Flint bot request body
     body = '{text": "' + reply_message + '"}'
     
