@@ -48,17 +48,18 @@ try {
         
         // Define slack reply
         //attachments = '[{"fallback":"Virtual machine start notification","color":"#36a64e","title":"Started Virtual Machine.","text":"'+user_split[0]+', AWS virtual machine with ID(*'+instance_id+'*) has been successfully started.","footer":"Flint","ts":123456789}]'
-       var attachments = '{"fallback":"Virtual machine start notification","color":"#36a64e","fields":[{"title":"Started Virtual Machine.","value":"'+user_split[0]+', virtual machine with ID(*'+instance_id+'*) has been successfully started.","short":false}],"footer":"Flint"}'
-       log.trace('1'+attachments)
+       //attachments = '{"fallback":"Virtual machine start notification","color":"#36a64e","fields":[{"title":"Started Virtual Machine.","value":"'+user_split[0]+', virtual machine with ID(*'+instance_id+'*) has been successfully started.","short":false}],"footer":"Flint"}'
+       //log.trace('1'+attachments)
 
         //log.trace('7'+ JSON.stringify(obj))
 
 
         //aws_reply_message = 'Hi, ' + user_split[0] + ', requested VM instance with ID(*'+instance_id+'*) has been successfully stopped on AWS.'
-        body = '{"text": "'+attachments+'"}'
+        //body = '{"text": "'+attachments+'"}'
+        body = '{"text": [{"fallback":"Virtual machine start notification","color":"#36a64e","fields":[{"title":"Started Virtual Machine.","value":"Akash, virtual machine with ID(*i-0b46b5ccdc61f9bc8*) has been successfully started.","short":false}],"footer":"Flint"}]}'
         // Send slack reply
 
-        log.trace('3'+body)
+        log.trace('BODY'+body)
 
         call.bit('flint-slack:add_message.js')
             .set('body', body)
