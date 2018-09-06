@@ -199,5 +199,4 @@ try {
         .sync()
 
 }
-
 log.trace("Finished execution of 'flint-slack:slack_listener.js' flintbit.")
