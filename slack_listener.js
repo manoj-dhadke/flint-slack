@@ -176,7 +176,7 @@ try {
         if (command_without_trigger.length == 0 || command_without_trigger == '') {
 
             // In-case only trigger word is used, all valid commands will be listed
-            slack_reply_message = 'This command is invalid.\n Here\'s a list of valid commands.* \n*AWS VM Creation:* \nflint newvm <provider> <image-type> <instance-type> <region> <availability-zone> \n*Start a VM:* \nflint startvm <provider> <instance-id>\n*Stop a VM:* \nflint stopvm <provider> <instance-id>\n *Delete a VM:* \nflint destroyvm <provider> <instance-id>'
+            slack_reply_message = 'This command is invalid. Here\'s a list of valid commands. \n*AWS VM Creation:* \nflint newvm <provider> <image-type> <instance-type> <region> <availability-zone> \n*Start a VM:* \nflint startvm <provider> <instance-id>\n*Stop a VM:* \nflint stopvm <provider> <instance-id>\n *Delete a VM:* \nflint destroyvm <provider> <instance-id>'
             // Slack-Flint bot request-body
             dateObj = new Date()
             timestamp = Math.floor(dateObj.getTime()/1000)
