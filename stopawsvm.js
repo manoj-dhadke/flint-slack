@@ -7,17 +7,17 @@ log.trace("Started execution of 'flint-slack:stopawsvm.js' flintbit.")
 
 try {
     //  Flintbit Input Parameters
-    provider = input.get('provider')         // Name of provider (valid inputs : 'aws','digitalocean' etc)
+    id = input.get('id')
     instance_id = input.get('instance_id')   // Instance id to stop
-    id = input.get('id')                     // Token ID
+    provider = input.get('provider')         // Name of provider (valid inputs : 'aws','digitalocean' etc)
     chat_toolkit = input.get('chat_tool')    // Chat tool name (Valid inputs : 'hipchat','slack')
-    user_name = input.get('user_name')       // Name of chat tool user
     region = input.get('region')             // Region in which instance present
+    user_name = input.get('user_name')       // Name of chat tool user
 
     // Inputs for sending Slack message flintbit
     url = input.get('url')
     method = input.get('method')
-    http_connector_name = input.get('http_connector _name') 
+    http_connector_name = input.get('http_connector_name') 
 
     // Global configuration of hipchat
     connector_aws_name = config.global('hipchat-terraform.terraform.aws_connector.name')
