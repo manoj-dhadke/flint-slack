@@ -8,6 +8,8 @@ log.trace("Started execution of 'flint-slack:slack_listener.js' flintbit.")
 try {
     key_values = []
     command_without_trigger = []
+    greeting = ''
+
     // parse URL encoded data to json
     log.info(input)
     message = input.get('body') // Flint body field to get slack data
@@ -73,9 +75,17 @@ try {
     currentHour = currentDate.getHours()
     log.trace("HOUR IS ==============> "+currentHour)
 
+    if(currentHour >=5 || currentHour <=12 ){
+        greeting = "Good morning, "
+    }else if(currentHour > 12 || currentHour <= 17){
+        greeting = "Good afternoon, "
+    }else if(currentHour >17 || currentHour <= 19){
+        greeting = "Good evening, "
+    }
+
     if (command_without_trigger.length != 0 && provider == "aws") {
         // Slack-Flint bot request-body for acknowledgement
-        acknowledgement_body = '{"text": "Hello, ' + user_split[0]+ '. I\'ve got your request and I\'m processing it."}'
+        acknowledgement_body = '{"text": "'+greeting+'' + user_split[0]+ '. I\'ve got your request and I\'m processing it."}'
         call.bit('flint-slack:add_message.js')
             .set('body', acknowledgement_body)
             .set('chat_tool', slack_chat)
