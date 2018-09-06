@@ -13,6 +13,7 @@ try {
     chat_toolkit = input.get('chat_tool')    // Chat tool name (Valid inputs : 'hipchat','slack')
     region = input.get('region')             // Region in which instance present
     user_name = input.get('user_name')       // Name of chat tool user
+    user_split = user_name.split(' ')
 
     // Inputs for sending Slack message flintbit
     url = input.get('url')
