@@ -45,6 +45,7 @@ try {
         log.info("Response message: "+response_message)
         
         aws_reply_message = 'Hi ' + user_name + ', requested VM instance with ID(*'+instance_id+'*) has been successfully stopped on AWS.'
+        body = '{"text": "'+aws_reply_message+'"}'
         call.bit('flint-slack:add_message.js')
             .set('body', body)
             .set('chat_tool', slack_chat)
