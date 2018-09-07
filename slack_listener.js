@@ -116,7 +116,7 @@ try {
                 log.trace("COMMAND LENGTH"+command.length)
                 
                 if(command.length < 7){
-                    for(x=2; x<command.length; x++){
+                    for(x=2; x<7; x++){
                         
                         if(command[x]==null || command[x].length == 0 || command[x] == ''){
                             log.trace("PARAMETER MAPPING"+parameter_mapping[x])
