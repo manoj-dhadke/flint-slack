@@ -159,6 +159,7 @@ try {
                         .sync()
                     break;
                 }
+                break;
             // Start Virtual Machine
             case 'startvm':
                 instance_id = command[3]
@@ -204,6 +205,7 @@ try {
                         .sync()
                     break;
                 }
+                break;
             // Stop Virtual Machine
             case 'stopvm':
                 log.trace('Calling Flintbit to perform stopawsvm Operation')
@@ -249,6 +251,7 @@ try {
                         .sync()
                     break;
                 }
+                break;
 
             case 'destroyvm':
                 instance_id = command[3]
@@ -292,6 +295,7 @@ try {
                         .sync()
                     break;
                 }
+                break;
         }
     } else {
         if (command_without_trigger.length == 0 || command_without_trigger == '') {
