@@ -10,6 +10,17 @@ try {
     command_without_trigger = []
     greeting = ''
 
+    parameter_mapping = {
+        2 : '<provider>',
+        3 : '<image-type>',
+        4 : '<instance-type>',
+        5 : '<region>',
+        6 : '<availability-zone>'
+    }
+
+    //For timestamp
+    dateObj = new Date()
+
     // parse URL encoded data to json
     log.info(input)
     message = input.get('body') // Flint body field to get slack data
@@ -100,7 +111,32 @@ try {
                 instance_type = command[4]
                 region = command[5]
                 availability_zone = command[6]
+                parameter_check = ''
 
+                if(command.length < 7){
+                    for(x=2; x<command.length; x++){
+                        if(command[x]==null || command[x].length == 0 || command[x] == ''){
+                        parameter_check += parameter_mapping[x]+' '
+                        }
+                    }
+                // Missing parameters statement             
+                miss_param_stat = 'Parameter(s) *'+parameter_check+'* are missing.'
+                // Timestamp for slack message attachment
+                timestamp = Math.floor(dateObj.getTime()/1000)
+                // Missing parameters body
+                body = '{"text":"Hi, '+user_split[0]+'.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"'+miss_param_stat+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
+
+                // Send Slack message to notify missing parameters
+                call.bit('flint-slack:add_message.js')
+                    .set('body', body)
+                    .set('chat_tool', slack_chat)
+                    .set('url', url)
+                    .set('method', method)
+                    .set('http_connector_name', http_connector_name)
+                    .sync()
+
+                }else{
+            
                 log.trace('Calling Flintbit to perform newvm Operation')
                 call.bit('flint-slack:newvm.js')
                     .set('provider', provider)
@@ -117,6 +153,7 @@ try {
                     .set('http_connector_name', http_connector_name)
                     .sync()
                 break;
+                }
 
             case 'startvm':
                 instance_id = command[3]
@@ -178,7 +215,6 @@ try {
             // In-case only trigger word is used, all valid commands will be listed
             slack_reply_message = 'This command is invalid. Here\'s a list of valid commands. \n*AWS VM Creation:* \nflint newvm <provider> <image-type> <instance-type> <region> <availability-zone> \n*Start a VM:* \nflint startvm <provider> <instance-id>\n*Stop a VM:* \nflint stopvm <provider> <instance-id>\n *Delete a VM:* \nflint destroyvm <provider> <instance-id>'
             // Slack-Flint bot request-body
-            dateObj = new Date()
             timestamp = Math.floor(dateObj.getTime()/1000)
             body = '{"text":"Hi, '+user_split[0]+'.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"'+slack_reply_message+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
 
