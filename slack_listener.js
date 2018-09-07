@@ -95,7 +95,7 @@ try {
         greeting = "Good evening, "
     }
 
-    if (command_without_trigger.length != 0 && action != "" || action != null) {
+    if (command_without_trigger.length != 0 && provider == "aws") {
         // Slack-Flint bot request-body for acknowledgement
         acknowledgement_body = '{"text": "' + greeting + '' + user_split[0] + '. I\'ve got your request and I\'m processing it."}'
         call.bit('flint-slack:add_message.js')
@@ -302,6 +302,22 @@ try {
 
             // In-case only trigger word is used, all valid commands will be listed
             slack_reply_message = 'This command is invalid. Here\'s a list of valid commands. \n*AWS VM Creation:* \nflint newvm <provider> <image-type> <instance-type> <region> <availability-zone> \n*Start a VM:* \nflint startvm <provider> <instance-id>\n*Stop a VM:* \nflint stopvm <provider> <instance-id>\n *Delete a VM:* \nflint destroyvm <provider> <instance-id>'
+            // Slack-Flint bot request-body
+            timestamp = Math.floor(dateObj.getTime() / 1000)
+            body = '{"text":"Hi, ' + user_split[0] + '.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"' + slack_reply_message + '","short":false}],"footer":"Flint", "ts":' + timestamp + '}]}'
+
+            // Send Slack message
+            call.bit('flint-slack:add_message.js')
+                .set('body', body)
+                .set('chat_tool', slack_chat)
+                .set('url', url)
+                .set('method', method)
+                .set('http_connector_name', http_connector_name)
+                .sync()
+        }
+        else if(provider != "aws"){
+            // In-case only trigger word is used, all valid commands will be listed
+            slack_reply_message = 'This command is invalid. Provider should be \'aws\''
             // Slack-Flint bot request-body
             timestamp = Math.floor(dateObj.getTime() / 1000)
             body = '{"text":"Hi, ' + user_split[0] + '.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"' + slack_reply_message + '","short":false}],"footer":"Flint", "ts":' + timestamp + '}]}'
