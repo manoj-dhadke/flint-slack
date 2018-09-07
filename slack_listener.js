@@ -105,10 +105,10 @@ try {
         greeting = "Good morning, "
     } else if (currentHour >= 12 || currentHour <= 5 && AMPM == 'PM') {
         greeting = "Good afternoon, "
-    } else if (currentHour > 5 || currentHour <= 7) {
+    } else if (currentHour > 5 || currentHour <= 8 && AMPM == 'PM') {
         greeting = "Good evening, "
     } else {
-        greeting = "Hola!"
+        greeting = "Hola, "
     }
 
     if (command_without_trigger.length != 0 && provider == "aws") {
