@@ -6,6 +6,9 @@
 
 log.trace("Started execution of 'flint-slack:newvm.js' flintbit.")
 try {
+    // To get timestamp
+    dateObj = new Date()
+
     //Flintbit Input Parameters
     provider = input.get('provider')                   // Name of provider (valid inputs : 'aws','digitalocean' etc)
     image_type = input.get('image_type')               // Image type to create new instance
@@ -47,10 +50,11 @@ try {
         instance_type = state.get('instance_type')              // instance type
         private_ip = state.get('private_ip')                    // Private IP
 
-        // Bot reply message with all the instance details
-        reply_message = 'New virtual machine has been created ' + user_split[0] + '. \n*AWS VM Details:* \n*AMI ID:* ' + ami_id + '\n *Public IP:* ' + public_ip + ' \n*Private IP:* ' + private_ip + ' \nYou can use *' + key_name + '* to access it.'
-        // Slack-Flint bot request body
-        body = '{"text": "' + reply_message + '"}'
+        // Slack reply message with all the instance details : Define slack reply
+        reply_message = 'new virtual machine has been created and here are the details.* \n*AMI ID:* ' + ami_id + '\n *Public IP:* ' + public_ip + ' \n*Private IP:* ' + private_ip
+        
+        timestamp = Math.floor(dateObj.getTime()/1000)
+        body = '{"attachments": [{"fallback":"Virtual machine start notification","color":"#36a64e","fields":[{"title":"Created New Virtual Machine.","value":"Hi, '+user_split[0]+', '+reply_message+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
 
         // Slack-Flint bot reply flintbit
         call.bit('flint-slack:add_message.js')
@@ -62,9 +66,12 @@ try {
             .sync()
 
     } else {
-        reply_message = 'Oops! ' + user_split[0] + ', AWS VM creation has failed : *' + aws_provision_response.get('error').toString() + '*'
-        // Slack-Flint bot request body
-        body = '{"text": "' + reply_message + '"}'
+        reply_message = 'Oops! ' + user_split[0] + ', virtual machine creation has failed. \n*Error:* \n' + aws_provision_response.get('error').toString()
+        // Slack fail message body
+        timestamp = Math.floor(dateObj.getTime()/1000)
+        // Failed to create new VM body
+        body = '{"text":"Hi, '+user_split[0]+'!", "attachments": [{"fallback":"VM creation failed","color":"#f40303","fields":[{"title":"Virtual Machine creation has failed","value":"'+reply_message+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
+
         call.bit('flint-slack:add_message.js')
             .set('body', body)
             .set('chat_tool', chat_tool_name)
@@ -77,17 +84,5 @@ try {
 catch (error) {
     log.error(error)
     output.set('exit-code', 1).set('message', error)
-
-    reply_message = 'Hello ' + user_split[0] + ', virtual machine creation failed on ' + provider + ' due to *' + error + '*'
-    // Slack-Flint bot request body
-    body = '{text": "' + reply_message + '"}'
-    
-    call.bit('flint-slack:add_message.js')
-        .set('body', body)
-        .set('chat_tool', chat_tool_name)
-        .set('url', url)
-        .set('method', method)
-        .set('http_connector_name', http_connector_name)
-        .sync()
 }
 log.trace("Finished execution of 'flint-slack:newvm.js' flintbit.")

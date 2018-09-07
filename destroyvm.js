@@ -6,6 +6,9 @@
 
 log.trace("Started execution of 'flint-slack:destroyvm.js' flintbit.")
 try {
+    // To get timestamp
+    dateObj = new Date()
+
     // Flintbit Input Parameters
     id = input.get('id')
     region = input.get('region')                //# Region in which instance present
@@ -36,8 +39,8 @@ try {
     if(response.get('exit-code') == 0){
         output.set('exit-code', 0)
 
-        reply_message = 'Hi ' + user_split[0] + ', I\'ve successfully deleted the requested AWS virtual machine with ID (*' + instance_id + '*)'
-        body = '{"text": "'+reply_message+'"}'
+        timestamp = Math.floor(dateObj.getTime()/1000)
+        body = '{"attachments": [{"fallback":"Virtual machine start notification","color":"#36a64e","fields":[{"title":"Terminated Virtual Machine.","value":"'+user_split[0]+', virtual machine with ID(*'+instance_id+'*) has been successfully terminated.","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
 
         call.bit('flint-slack:add_message.js')
             .set('body', body)
@@ -49,8 +52,11 @@ try {
     }
     else{
         // Failure in terminating VM
-        reply_message = 'Oops, ' + user_split[0] + '. I\'ve failed to delete the requested AWS virtual machine with ID (*'+instance_id+'*) due to ' + response.get('message') + ''
-        body = body = '{"text": "' + reply_message + '"}'
+        reply_message = 'Oops! ' + user_split[0] + ', virtual machine with ID(*'+instance_id+'*) has failed to terminate. \n*Error:* \n' + response.get('message')
+
+        timestamp = Math.floor(dateObj.getTime()/1000)
+        // Failed to create new VM body
+        body = '{"text":"Hi, '+user_split[0]+'!", "attachments": [{"fallback":"Virtual Machine failed to terminate","color":"#f40303","fields":[{"title":"Virtual Machine terminate operation has failed","value":"'+reply_message+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
 
         call.bit('flint-slack:add_message.js')
             .set('body', body)

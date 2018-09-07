@@ -5,6 +5,8 @@
 **/
 
 log.trace("Started execution of 'flint-slack:startawsvm.js' flintbit.")
+// To get timestamp
+dateObj = new Date()
 
 // Flintbit Input Parameters
 provider = input.get('provider')         // Name of provider (valid inputs : 'aws','digitalocean' etc)
@@ -40,13 +42,8 @@ try {
         log.info("Success in executing " + connector_aws_name + " connector where, exitcode : " + response_exitcode + " message :" + response_message)
 
         // Slack message in-case virtual machine is started successfully
-        aws_reply_message = user_name + ', virtual machine with ID(*' + instance_id +'*) has been successfully started on AWS'
-
-        //attachments = '"fallback": "Virtual machine start notification","color": "#36a64e","title": "Started Virtual Machine.","text": "'+user_name + ', virtual machine with ID(' + instance_id +') has been successfully started on AWS", "footer": "Flint","ts": 123456789'
-
-        //aws_reply_message = '{"text": "' + aws_reply_message + '"}'
-        body =  '{"text":"'+aws_reply_message+'"}'  
-        //, "attachments":[{'+attachments+'}]   
+        timestamp = Math.floor(dateObj.getTime()/1000)
+        body = '{"attachments": [{"fallback":"Virtual machine start notification","color":"#36a64e","fields":[{"title":"Started Virtual Machine.","value":"'+user_split[0]+', virtual machine with ID(*'+instance_id+'*) has been successfully started.","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'  
         
         call.bit('flint-slack:add_message.js')
             .set('body', body)
@@ -57,24 +54,28 @@ try {
             .sync()
 
     } else {
+
         log.error("ERROR in executing" + connector_aws_name + "\nExitcode : " + response_exitcode + "\n Message : " + response_message)
         response_message.toString().replace(/[!%&"]/, '')
         log.info('Start ' + response_message.toString())
-        aws_reply_message = 'Hello ' + user_name + ', VM start failed on AWS with ID: ' + instance_id + ' due to ' + response_message.toString() + ''
-    }
-} catch (error) {
-    log.error(error.message)
-    output.set('exit-code', 1).set('message', error.message)
 
-    aws_reply_message = 'Hello ' + user_name + ', VM start failed on ' + provider.toUpperCase() + ' with ID ' + instance_id + ' due to ' + error.message + ''
-    body = '{"text": "' + aws_reply_message + '"}'
+        reply_message = 'Oops! ' + user_split[0] + ', virtual machine with ID(*' + instance_id + '*) has failed to start. \n*Error:* \n' + response_message.toString() + ''
 
-    call.bit('flint-slack:add_message.js')
+        timestamp = Math.floor(dateObj.getTime()/1000)
+        // Failed to create new VM body
+        body = '{"text":"Hi, '+user_split[0]+'!", "attachments": [{"fallback":"Virtual Machine failed to start","color":"#f40303","fields":[{"title":"Virtual Machine start operation has failed","value":"'+reply_message+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
+
+        // Send Slack fail message
+        call.bit('flint-slack:add_message.js')
         .set('body', body)
         .set('chat_tool', chat_toolkit)
         .set('url', url)
         .set('method', method)
         .set('http_connector_name', http_connector_name)
         .sync()
+    }
+} catch (error) {
+    log.error(error.message)
+    output.set('exit-code', 1).set('message', error.message)
 }
 log.trace("Finished execution of 'flint-slack:startawsvm.js' flintbit.")

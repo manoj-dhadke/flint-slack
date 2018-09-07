@@ -6,10 +6,13 @@
 
 log.trace("Started execution of 'flint-slack:slack_listener.js' flintbit.")
 try {
+    //For timestamp
+    dateObj = new Date()
+
     key_values = []
     command_without_trigger = []
     greeting = ''
-
+    // To frame missing parameters statement
     parameter_mapping = {
         2 : '<provider>',
         3 : '<image-type>',
@@ -17,9 +20,6 @@ try {
         5 : '<region>',
         6 : '<availability-zone>'
     }
-
-    //For timestamp
-    dateObj = new Date()
 
     // parse URL encoded data to json
     log.info(input)

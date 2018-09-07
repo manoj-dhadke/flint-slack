@@ -6,6 +6,9 @@
 log.trace("Started execution of 'flint-slack:stopawsvm.js' flintbit.")
 
 try {
+    // To get timestamp
+    dateObj = new Date()
+
     //  Flintbit Input Parameters
     id = input.get('id')
     instance_id = input.get('instance_id')   // Instance id to stop
@@ -48,10 +51,8 @@ try {
         
         // Define slack reply
 
-        //aws_reply_message = 'Hi, ' + user_split[0] + ', requested VM instance with ID(*'+instance_id+'*) has been successfully stopped on AWS.'
-        dateObj = new Date()
         timestamp = Math.floor(dateObj.getTime()/1000)
-        body = '{"attachments": [{"fallback":"Virtual machine start notification","color":"#36a64e","fields":[{"title":"Started Virtual Machine.","value":"'+user_split[0]+', virtual machine with ID(*'+instance_id+'*) has been successfully started.","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
+        body = '{"attachments": [{"fallback":"Virtual machine start notification","color":"#36a64e","fields":[{"title":"Stopped Virtual Machine.","value":"'+user_split[0]+', virtual machine with ID(*'+instance_id+'*) has been successfully stopped.","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
 
         // Send slack reply
         log.trace('BODY'+body)
@@ -69,7 +70,11 @@ try {
         log.error("ERROR: \nExitcode : "+response_exitcode+" \nMessage : "+response_message)
 
         response_message.replace(/[!%&"]/, '')
-        aws_reply_message = 'Oops! ' + user_name + ', VM failed to stop on AWS with ID(*' + instance_id + '*) due to ' + response_message.toString() + ''
+        reply_message = 'Oops! ' + user_split[0] + ', virtual machine with ID(*' + instance_id + '*) has failed to stop. \n*Error:* \n' + response_message.toString() + ''
+
+        timestamp = Math.floor(dateObj.getTime()/1000)
+        // Failed to create new VM body
+        body = '{"text":"Hi, '+user_split[0]+'!", "attachments": [{"fallback":"Virtual Machine failed to start","color":"#f40303","fields":[{"title":"Virtual Machine stop operation has failed","value":"'+reply_message+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
     }
     // Exception-handling
 } catch (error) {
