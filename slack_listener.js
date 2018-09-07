@@ -14,11 +14,11 @@ try {
     greeting = ''
     // To frame missing parameters statement
     parameter_mapping = {
-        2 : '<provider>',
-        3 : '<image-type>',
-        4 : '<instance-type>',
-        5 : '<region>',
-        6 : '<availability-zone>'
+        2: '<provider>',
+        3: '<image-type>',
+        4: '<instance-type>',
+        5: '<region>',
+        6: '<availability-zone>'
     }
 
     // parse URL encoded data to json
@@ -80,23 +80,23 @@ try {
     http_connector_name = "http"
 
     log.trace("provider" + provider)
-    
+
     // Get current time and set greeting message accordingly
     currentDate = new Date()
     currentHour = currentDate.getHours()
-    log.trace("HOUR IS ==============> "+currentHour)
+    log.trace("HOUR IS ==============> " + currentHour)
 
-    if(currentHour >=5 || currentHour <=12 ){
+    if (currentHour >= 5 || currentHour <= 12) {
         greeting = "Good morning, "
-    }else if(currentHour > 12 || currentHour <= 17){
+    } else if (currentHour > 12 || currentHour <= 17) {
         greeting = "Good afternoon, "
-    }else if(currentHour >17 || currentHour <= 19){
+    } else if (currentHour > 17 || currentHour <= 19) {
         greeting = "Good evening, "
     }
 
     if (command_without_trigger.length != 0 && provider == "aws") {
         // Slack-Flint bot request-body for acknowledgement
-        acknowledgement_body = '{"text": "'+greeting+'' + user_split[0]+ '. I\'ve got your request and I\'m processing it."}'
+        acknowledgement_body = '{"text": "' + greeting + '' + user_split[0] + '. I\'ve got your request and I\'m processing it."}'
         call.bit('flint-slack:add_message.js')
             .set('body', acknowledgement_body)
             .set('chat_tool', slack_chat)
@@ -106,6 +106,7 @@ try {
             .sync()
 
         switch (action) {
+            // Create Virtual Machine
             case 'newvm':
                 image_type = command[3]
                 instance_type = command[4]
@@ -113,116 +114,192 @@ try {
                 availability_zone = command[6]
                 parameter_check = ''
 
-                log.trace("COMMAND LENGTH"+command.length)
-                
-                if(command.length < 7){
-                    for(x=2; x<7; x++){
-                        
-                        if(command[x]==null || command[x].length == 0 || command[x] == ''){
-                            log.trace("PARAMETER MAPPING"+parameter_mapping[x])
-                            parameter_check += parameter_mapping[x]+' '
+                // Slack reply for missing parameters 
+                if (command.length < 7) {
+                    for (x = 2; x < 7; x++) {
+
+                        if (command[x] == null || command[x].length == 0 || command[x] == '') {
+                            parameter_check += parameter_mapping[x] + ' '
                         }
                     }
-                    log.trace("MISSING PARAMETER : "+parameter_check)
+                    log.trace("MISSING PARAMETER : " + parameter_check)
 
-                // Missing parameters statement             
-                miss_param_stat = 'Parameter(s) *'+parameter_check+'* are missing.'
-                // Timestamp for slack message attachment
-                timestamp = Math.floor(dateObj.getTime()/1000)
-                // Missing parameters body
-                body = '{"text":"Hi, '+user_split[0]+'.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"'+miss_param_stat+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
+                    // Missing parameters statement             
+                    miss_param_stat = 'Parameter(s) *' + parameter_check + '* are missing.'
+                    // Timestamp for slack message attachment
+                    timestamp = Math.floor(dateObj.getTime() / 1000)
+                    // Missing parameters body
+                    body = '{"text":"Hi, ' + user_split[0] + '.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"' + miss_param_stat + '","short":false}],"footer":"Flint", "ts":' + timestamp + '}]}'
 
-                // Send Slack message to notify missing parameters
-                call.bit('flint-slack:add_message.js')
-                    .set('body', body)
-                    .set('chat_tool', slack_chat)
-                    .set('url', url)
-                    .set('method', method)
-                    .set('http_connector_name', http_connector_name)
-                    .sync()
+                    // Send Slack message to notify missing parameters
+                    call.bit('flint-slack:add_message.js')
+                        .set('body', body)
+                        .set('chat_tool', slack_chat)
+                        .set('url', url)
+                        .set('method', method)
+                        .set('http_connector_name', http_connector_name)
+                        .sync()
 
-                }else{
-            
-                log.trace('Calling Flintbit to perform newvm Operation')
-                call.bit('flint-slack:newvm.js')
-                    .set('provider', provider)
-                    .set('image_type', image_type)
-                    .set('instance_type', instance_type)
-                    .set('region', region)
-                    .set('availability_zone', availability_zone)
-                    .set('id', id)
-                    .set('user_name', user_name)
-                    .set('chat_tool', slack_chat)
-                    .set('channel_name', channel_name)
-                    .set('url', url)
-                    .set('method', method)
-                    .set('http_connector_name', http_connector_name)
-                    .sync()
-                break;
+                } else {
+                    log.trace('Calling Flintbit to perform newvm Operation')
+                    call.bit('flint-slack:newvm.js')
+                        .set('provider', provider)
+                        .set('image_type', image_type)
+                        .set('instance_type', instance_type)
+                        .set('region', region)
+                        .set('availability_zone', availability_zone)
+                        .set('id', id)
+                        .set('user_name', user_name)
+                        .set('chat_tool', slack_chat)
+                        .set('channel_name', channel_name)
+                        .set('url', url)
+                        .set('method', method)
+                        .set('http_connector_name', http_connector_name)
+                        .sync()
+                    break;
                 }
-
+            // Start Virtual Machine
             case 'startvm':
                 instance_id = command[3]
                 region = command[4]
+                // Slack reply for missing parameters
+                if (command.length < 5) {
+                    for (x = 2; x < 5; x++) {
 
-                log.trace('Calling Flintbit to perform startawsvm Operation')
-                call.bit('flint-slack:startawsvm.js')
-                    .set('id', id)
-                    .set('instance_id', instance_id)
-                    .set('provider', provider)
-                    .set('chat_tool', slack_chat)
-                    .set('region', region)
-                    .set('user_name', user_name)
-                    .set('url', url)
-                    .set('method', method)
-                    .set('http_connector_name', http_connector_name)
-                    .sync()
-                break;
+                        if (command[x] == null || command[x].length == 0 || command[x] == '') {
+                            parameter_check += parameter_mapping[x] + ' '
+                        }
+                    }
+                    log.trace("MISSING PARAMETER : " + parameter_check)
 
+                    // Missing parameters statement             
+                    miss_param_stat = 'Parameter(s) *' + parameter_check + '* are missing.'
+                    // Timestamp for slack message attachment
+                    timestamp = Math.floor(dateObj.getTime() / 1000)
+                    // Missing parameters body
+                    body = '{"text":"Hi, ' + user_split[0] + '.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"' + miss_param_stat + '","short":false}],"footer":"Flint", "ts":' + timestamp + '}]}'
+
+                    // Send Slack message to notify missing parameters
+                    call.bit('flint-slack:add_message.js')
+                        .set('body', body)
+                        .set('chat_tool', slack_chat)
+                        .set('url', url)
+                        .set('method', method)
+                        .set('http_connector_name', http_connector_name)
+                        .sync()
+                } else {
+
+                    log.trace('Calling Flintbit to perform startawsvm Operation')
+                    call.bit('flint-slack:startawsvm.js')
+                        .set('id', id)
+                        .set('instance_id', instance_id)
+                        .set('provider', provider)
+                        .set('chat_tool', slack_chat)
+                        .set('region', region)
+                        .set('user_name', user_name)
+                        .set('url', url)
+                        .set('method', method)
+                        .set('http_connector_name', http_connector_name)
+                        .sync()
+                    break;
+                }
+            // Stop Virtual Machine
             case 'stopvm':
                 log.trace('Calling Flintbit to perform stopawsvm Operation')
                 instance_id = command[3]
                 region = command[4]
 
-                call.bit('flint-slack:stopawsvm.js')
-                    .set('id', id)
-                    .set('instance_id', instance_id)
-                    .set('provider', provider)
-                    .set('chat_tool', slack_chat)
-                    .set('region', region)
-                    .set('user_name', user_name)
-                    .set('url', url)
-                    .set('method', method)
-                    .set('http_connector_name', http_connector_name)
-                    .sync()
-                break;
+                // Slack reply for missing parameters
+                if (command.length < 5) {
+                    for (x = 2; x < 5; x++) {
+
+                        if (command[x] == null || command[x].length == 0 || command[x] == '') {
+                            parameter_check += parameter_mapping[x] + ' '
+                        }
+                    }
+                    log.trace("MISSING PARAMETER : " + parameter_check)
+
+                    // Missing parameters statement             
+                    miss_param_stat = 'Parameter(s) *' + parameter_check + '* are missing.'
+                    // Timestamp for slack message attachment
+                    timestamp = Math.floor(dateObj.getTime() / 1000)
+                    // Missing parameters body
+                    body = '{"text":"Hi, ' + user_split[0] + '.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"' + miss_param_stat + '","short":false}],"footer":"Flint", "ts":' + timestamp + '}]}'
+
+                    // Send Slack message to notify missing parameters
+                    call.bit('flint-slack:add_message.js')
+                        .set('body', body)
+                        .set('chat_tool', slack_chat)
+                        .set('url', url)
+                        .set('method', method)
+                        .set('http_connector_name', http_connector_name)
+                        .sync()
+                } else {
+                    call.bit('flint-slack:stopawsvm.js')
+                        .set('id', id)
+                        .set('instance_id', instance_id)
+                        .set('provider', provider)
+                        .set('chat_tool', slack_chat)
+                        .set('region', region)
+                        .set('user_name', user_name)
+                        .set('url', url)
+                        .set('method', method)
+                        .set('http_connector_name', http_connector_name)
+                        .sync()
+                    break;
+                }
 
             case 'destroyvm':
                 instance_id = command[3]
                 region = command[4]
 
-                call.bit('flint-slack:destroyvm.js')
-                    .set('id', id)
-                    .set('region', region)
-                    .set('provider', provider)
-                    .set('instance_id', instance_id)
-                    .set('chat_tool', slack_chat)
-                    .set('user_name', user_name)
-                    .set('url', url)
-                    .set('method', method)
-                    .set('http_connector_name', http_connector_name)
-                    .sync()
-                break;
+                // Slack reply for missing parameters
+                if (command.length < 5) {
+                    for (x = 2; x < 5; x++) {
+
+                        if (command[x] == null || command[x].length == 0 || command[x] == '') {
+                            parameter_check += parameter_mapping[x] + ' '
+                        }
+                    }
+
+                    // Missing parameters statement             
+                    miss_param_stat = 'Parameter(s) *' + parameter_check + '* are missing.'
+                    // Timestamp for slack message attachment
+                    timestamp = Math.floor(dateObj.getTime() / 1000)
+                    // Missing parameters body
+                    body = '{"text":"Hi, ' + user_split[0] + '.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"' + miss_param_stat + '","short":false}],"footer":"Flint", "ts":' + timestamp + '}]}'
+
+                    // Send Slack message to notify missing parameters
+                    call.bit('flint-slack:add_message.js')
+                        .set('body', body)
+                        .set('chat_tool', slack_chat)
+                        .set('url', url)
+                        .set('method', method)
+                        .set('http_connector_name', http_connector_name)
+                        .sync()
+                } else {
+                    call.bit('flint-slack:destroyvm.js')
+                        .set('id', id)
+                        .set('region', region)
+                        .set('provider', provider)
+                        .set('instance_id', instance_id)
+                        .set('chat_tool', slack_chat)
+                        .set('user_name', user_name)
+                        .set('url', url)
+                        .set('method', method)
+                        .set('http_connector_name', http_connector_name)
+                        .sync()
+                    break;
+                }
         }
-    }
-    else {
+    } else {
         if (command_without_trigger.length == 0 || command_without_trigger == '') {
 
             // In-case only trigger word is used, all valid commands will be listed
             slack_reply_message = 'This command is invalid. Here\'s a list of valid commands. \n*AWS VM Creation:* \nflint newvm <provider> <image-type> <instance-type> <region> <availability-zone> \n*Start a VM:* \nflint startvm <provider> <instance-id>\n*Stop a VM:* \nflint stopvm <provider> <instance-id>\n *Delete a VM:* \nflint destroyvm <provider> <instance-id>'
             // Slack-Flint bot request-body
-            timestamp = Math.floor(dateObj.getTime()/1000)
-            body = '{"text":"Hi, '+user_split[0]+'.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"'+slack_reply_message+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
+            timestamp = Math.floor(dateObj.getTime() / 1000)
+            body = '{"text":"Hi, ' + user_split[0] + '.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"' + slack_reply_message + '","short":false}],"footer":"Flint", "ts":' + timestamp + '}]}'
 
             // Send Slack message
             call.bit('flint-slack:add_message.js')
