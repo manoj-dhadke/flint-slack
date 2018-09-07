@@ -14,6 +14,7 @@ instance_id = input.get('instance_id')   // Instance id to start
 id = input.get('id')                     // Token ID
 chat_toolkit = input.get('chat_tool')    // Chat tool name (Valid inputs : 'hipchat','slack')
 user_name = input.get('user_name')       // Name of chat tool user
+user_split = user_name.split(' ')
 region = input.get('region')             // Region in which instance present
 url = input.get('url')
 method = input.get('method')
