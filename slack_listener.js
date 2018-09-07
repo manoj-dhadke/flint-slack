@@ -113,12 +113,18 @@ try {
                 availability_zone = command[6]
                 parameter_check = ''
 
+                log.trace("COMMAND LENGTH"+command.length)
+                
                 if(command.length < 7){
                     for(x=2; x<command.length; x++){
+                        
                         if(command[x]==null || command[x].length == 0 || command[x] == ''){
-                        parameter_check += parameter_mapping[x]+' '
+                            log.trace("PARAMETER MAPPING"+parameter_mapping[x])
+                            parameter_check += parameter_mapping[x]+' '
                         }
                     }
+                    log.trace("MISSING PARAMETER : "+parameter_check)
+
                 // Missing parameters statement             
                 miss_param_stat = 'Parameter(s) *'+parameter_check+'* are missing.'
                 // Timestamp for slack message attachment
@@ -232,18 +238,19 @@ try {
     log.error(error.message)
     output.set('exit-code', 1).set('message', error.message)
 
-    slack_reply_message = 'Hello ' + user_name + '. Something went wrong, please try again ' + error.message.toString()
-    // body = '{"channel": "#' + channel_name + '", "username": "FlintBot", "text": "' + slack_reply_message + '"}'
-    // Slack-Flint bot request-body
-    body = '{"text": "' + slack_reply_message + '"}'
+    // slack_reply_message = 'Oops! ' + user_split[0] + '. Something went wrong, please try again ' + error.message.toString()
 
-    call.bit('flint-slack:add_message.js')
-        .set('body', body)
-        .set('chat_tool', slack_chat)
-        .set('url', url)
-        .set('method', method)
-        .set('http_connector_name', http_connector_name)
-        .sync()
+    // // Slack-Flint bot request-body
+    // timestamp = Math.floor(dateObj.getTime()/1000)
+    // body = '{"text":"Hi, '+user_split[0]+'.", "attachments": [{"fallback":"Invalid Command","color":"#f40303","fields":[{"title":"Invalid Command","value":"'+slack_reply_message+'","short":false}],"footer":"Flint", "ts":'+timestamp+'}]}'
+
+    // call.bit('flint-slack:add_message.js')
+    //     .set('body', body)
+    //     .set('chat_tool', slack_chat)
+    //     .set('url', url)
+    //     .set('method', method)
+    //     .set('http_connector_name', http_connector_name)
+    //     .sync()
 
 }
 log.trace("Finished execution of 'flint-slack:slack_listener.js' flintbit.")
