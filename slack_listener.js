@@ -98,7 +98,7 @@ try {
     currentHour = currentHour ? currentHour : 12
     currentMinutes = currentMinutes < 10 ? '0'+currentMinutes : currentMinutes
 
-    currentTime = currentHours+' '+AMPM
+    currentTime = currentHour+' '+AMPM
     log.trace("HOUR IS ==============> " + currentHour)
 
     if (currentHour >= 5 || currentHour <= 11 && AMPM == 'AM') {
