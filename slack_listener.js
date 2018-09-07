@@ -92,14 +92,23 @@ try {
     // Get current time and set greeting message accordingly
     currentDate = new Date()
     currentHour = currentDate.getHours()
+    currentMinutes = currentDate.getMinutes()
+    AMPM = currentHour >= 12 ? 'PM' : 'AM'
+    currentHour = currentHour % 12
+    currentHour = currentHour ? currentHour : 12
+    currentMinutes = currentMinutes < 10 ? '0'+currentMinutes : currentMinutes
+
+    currentTime = currentHours+' '+AMPM
     log.trace("HOUR IS ==============> " + currentHour)
 
-    if (currentHour >= 5 || currentHour <= 12) {
+    if (currentHour >= 5 || currentHour <= 11 && AMPM == 'AM') {
         greeting = "Good morning, "
-    } else if (currentHour > 12 || currentHour <= 17) {
+    } else if (currentHour >= 12 || currentHour <= 5 && AMPM == 'PM') {
         greeting = "Good afternoon, "
-    } else if (currentHour > 17 || currentHour <= 19) {
+    } else if (currentHour > 5 || currentHour <= 7) {
         greeting = "Good evening, "
+    } else {
+        greeting = "Hola!"
     }
 
     if (command_without_trigger.length != 0 && provider == "aws") {
