@@ -22,6 +22,13 @@ try {
         6: '<availability-zone>'
     }
 
+    // Missing parameters for start, stop and destroy
+    parameter_mapping_2 = {
+        2: '<provider>',
+        3: '<instance-id>',
+        4: '<region>',
+    }
+
     // parse URL encoded data to json
     log.info(input)
     message = input.get('body') // Flint body field to get slack data
@@ -169,7 +176,7 @@ try {
                     for (x = 2; x < 5; x++) {
 
                         if (command[x] == null || command[x].length == 0 || command[x] == '') {
-                            parameter_check += parameter_mapping[x] + ' '
+                            parameter_check += parameter_mapping_2[x] + ' '
                         }
                     }
                     log.trace("MISSING PARAMETER : " + parameter_check)
@@ -217,7 +224,7 @@ try {
                     for (x = 2; x < 5; x++) {
 
                         if (command[x] == null || command[x].length == 0 || command[x] == '') {
-                            parameter_check += parameter_mapping[x] + ' '
+                            parameter_check += parameter_mapping_2[x] + ' '
                         }
                     }
                     log.trace("MISSING PARAMETER : " + parameter_check)
@@ -262,7 +269,7 @@ try {
                     for (x = 2; x < 5; x++) {
 
                         if (command[x] == null || command[x].length == 0 || command[x] == '') {
-                            parameter_check += parameter_mapping[x] + ' '
+                            parameter_check += parameter_mapping_2[x] + ' '
                         }
                     }
 
