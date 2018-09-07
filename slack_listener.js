@@ -95,7 +95,7 @@ try {
         greeting = "Good evening, "
     }
 
-    if (command_without_trigger.length != 0 && provider == "aws") {
+    if (command_without_trigger.length != 0 && action != "" || action != null) {
         // Slack-Flint bot request-body for acknowledgement
         acknowledgement_body = '{"text": "' + greeting + '' + user_split[0] + '. I\'ve got your request and I\'m processing it."}'
         call.bit('flint-slack:add_message.js')
