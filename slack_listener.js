@@ -9,7 +9,8 @@ try {
     //For timestamp
     dateObj = new Date()
 
-    key_values = []
+    parameter_check = ''            // To check for missing parameters
+    key_values = []                 // To get all commands in an array called 'command'
     command_without_trigger = []
     greeting = ''
     // To frame missing parameters statement
@@ -112,7 +113,7 @@ try {
                 instance_type = command[4]
                 region = command[5]
                 availability_zone = command[6]
-                parameter_check = ''
+                
 
                 // Slack reply for missing parameters 
                 if (command.length < 7) {
