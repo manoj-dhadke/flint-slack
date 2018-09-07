@@ -96,10 +96,9 @@ try {
     AMPM = currentHour >= 12 ? 'PM' : 'AM'
     currentHour = currentHour % 12
     currentHour = currentHour ? currentHour : 12
-    currentMinutes = currentMinutes < 10 ? '0'+currentMinutes : currentMinutes
 
     currentTime = currentHour+' '+AMPM
-    log.trace("HOUR IS ==============> " + currentHour)
+    log.trace("Current Time is ======="+currentTime)
 
     if (currentHour >= 5 || currentHour <= 11 && AMPM == 'AM') {
         greeting = "Good morning, "
