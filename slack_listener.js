@@ -8,7 +8,7 @@ log.trace("Started execution of 'flint-slack:slack_listener.js' flintbit.")
 try {
     //For timestamp
     dateObj = new Date()
-
+    log.trace("DATE IS:=========="+dateObj)
     parameter_check = ''            // To check for missing parameters
     key_values = []                 // To get all commands in an array called 'command'
     command_without_trigger = []
