@@ -8,11 +8,11 @@ log.trace("Started execution of 'flint-slack:slack_listener.js' flintbit.")
 try {
     //For timestamp
     dateObj = new Date()
-    log.trace("DATE IS:=========="+dateObj)
     parameter_check = ''            // To check for missing parameters
     key_values = []                 // To get all commands in an array called 'command'
     command_without_trigger = []
     greeting = ''
+
     // To frame missing parameters statement
     parameter_mapping = {
         2: '<provider>',
@@ -34,7 +34,6 @@ try {
     message = input.get('body') // Flint body field to get slack data
     log.info(message)
     message_body = message.replace(/[\"]/g, '').split('&')
-
     log.trace(message_body)
 
     for (index in message_body) {
@@ -53,6 +52,7 @@ try {
     user_id = key_values[7][1]
     user_name = key_values[8][1]
     user_name = user_name.replace(/[._-]/g, ' ').split(' ')
+
     // Convert username to a proper format
     for (x in user_name) {
         user_name[x] = user_name[x].charAt(0).toUpperCase() + user_name[x].substring(1)
@@ -86,33 +86,11 @@ try {
     url = "https://hooks.slack.com/services/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"
     method = 'post'
     http_connector_name = "http"
-
     log.trace("provider" + provider)
-
-    // Get current time and set greeting message accordingly
-    currentDate = new Date()
-    currentHour = currentDate.getHours()
-    currentMinutes = currentDate.getMinutes()
-    AMPM = currentHour >= 12 ? 'PM' : 'AM'
-    currentHour = currentHour % 12
-    currentHour = currentHour ? currentHour : 12
-
-    currentTime = currentHour+' '+AMPM
-    log.trace("Current Time is ======="+currentTime)
-
-    if (currentHour >= 5 || currentHour <= 11 && AMPM == 'AM') {
-        greeting = "Good morning, "
-    } else if (currentHour >= 12 || currentHour <= 5 && AMPM == 'PM') {
-        greeting = "Good afternoon, "
-    } else if (currentHour > 5 || currentHour <= 8 && AMPM == 'PM') {
-        greeting = "Good evening, "
-    } else {
-        greeting = "Hola, "
-    }
 
     if (command_without_trigger.length != 0 && provider == "aws") {
         // Slack-Flint bot request-body for acknowledgement
-        acknowledgement_body = '{"text": "' + greeting + '' + user_split[0] + '. I\'ve got your request and I\'m processing it."}'
+        acknowledgement_body = '{"text": "Hello ' + user_split[0] + '! I\'ve got your request and I\'m processing it."}'
         call.bit('flint-slack:add_message.js')
             .set('body', acknowledgement_body)
             .set('chat_tool', slack_chat)
