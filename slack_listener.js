@@ -11,7 +11,6 @@ try {
     parameter_check = ''            // To check for missing parameters
     key_values = []                 // To get all commands in an array called 'command'
     command_without_trigger = []
-    greeting = ''
 
     // To frame missing parameters statement
     parameter_mapping = {
