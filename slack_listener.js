@@ -81,6 +81,10 @@ try {
     http_connector_name = config.global('flint_slack_bot.http_connector_name')
     method = config.global('flint_slack_bot.method')
 
+    log.trace("URL :: "+ url)
+    log.trace("Connector Name :: "+http_connector_name)
+    log.trace("Method :: "+ method)
+
     // // TOD Inputs
     // url = ""
     // method = 'post'
