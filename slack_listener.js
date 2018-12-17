@@ -77,9 +77,12 @@ try {
     id = token
 
     // Inputs: Service config->slack_listener.js->add_message.js
-    url = config.global("flint_slack_bot").get("url")  // #demo on Slack url
-    http_connector_name = config.global("flint_slack_bot").get('http_connector_name')
-    method = config.global("flint_slack_bot").get('method')
+    win = config.global("winrm.target")
+    log.trace("WIinrM :: "+win)
+
+    url = config.global("flint_slack_bot.url")  // #demo on Slack url
+    http_connector_name = config.global("flint_slack_bot.http_connector_name")
+    method = config.global("flint_slack_bot.method")
 
     log.trace("URL :: "+ url)
     log.trace("Connector Name :: "+http_connector_name)
