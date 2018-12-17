@@ -77,15 +77,15 @@ try {
     id = token
 
     // Inputs: Service config->slack_listener.js->add_message.js
-    // url = input.get('url')  // #demo on Slack url
-    // http_connector_name = input.get('http_connector_name')
-    // method = input.get('method')
+    url = input.get('flint_slack_bot.url')  // #demo on Slack url
+    http_connector_name = input.get('flint_slack_bot.http_connector_name')
+    method = input.get('flint_slack_bot.method')
 
-    // TOD Inputs
-    url = "https://hooks.slack.com/services/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"
-    method = 'post'
-    http_connector_name = "http"
-    log.trace("provider" + provider)
+    // // TOD Inputs
+    // url = ""
+    // method = 'post'
+    // http_connector_name = "http"
+    // log.trace("provider" + provider)
 
     if (command_without_trigger.length != 0 && provider == "aws") {
         // Slack-Flint bot request-body for acknowledgement
