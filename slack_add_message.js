@@ -5,6 +5,8 @@
 **/
 log.info('Started execution of flint-slack:slack_add_message.js flintbit..')
 
+log.debug("Input :: "+input)
+
 // Getting input parameters
 
 body = input.get('slack_message')       // HTTP body to post
