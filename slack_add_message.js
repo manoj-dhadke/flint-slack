@@ -17,7 +17,9 @@ chat_toolkit = "slack"                 // Name of chat tool (Valid inputs : 'hip
 http_connector_name = "http"
 method = "post"
 headers = "Content-Type:application/json"
-url = input.get('slack_url')
+url = input.get('connection_name').get('encryptedCredentials').get('url')
+
+log.debug("URL :: "+url)
 
 if (url == null || url == "") {
     throw "Please provide valid Slack channel URL"
