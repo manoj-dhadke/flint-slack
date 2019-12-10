@@ -15,6 +15,12 @@
  *  from INFIVERVE TECHNOLOGIES PTE LIMITED, SINGAPORE.
 */
 
+/**
+** Creation Date: 5th September 2018
+** Summary: This is Slack-Flint Bot, Start Virtual Machine flintbit.
+** Description: This flintbit is developed to start vm after .
+**/
+
 log.trace("Started execution of 'flint-slack:startawsvm.js' flintbit.")
 // To get timestamp
 dateObj = new Date()

@@ -15,6 +15,13 @@
  *  from INFIVERVE TECHNOLOGIES PTE LIMITED, SINGAPORE.
 */
 
+
+/**
+** Creation Date: 6th September 2018
+** Summary: This is Slack-Flint Bot, Stop VM flintbit.
+** Description: This flintbit is developed to listen to slack messages/responses containing Flint triggers-word 'stopvm'.
+**/
+
 log.trace("Started execution of 'flint-slack:stopawsvm.js' flintbit.")
 
 try {

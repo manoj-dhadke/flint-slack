@@ -15,6 +15,12 @@
  *  from INFIVERVE TECHNOLOGIES PTE LIMITED, SINGAPORE.
 */
 
+/**
+** Creation Date: 6th September 2018
+** Summary: This is Slack-Flint Bot, Destriy VM flintbit.
+** Description: This flintbit is developed to listen to slack messages/responses containing Flint triggers-word 'destroyvm'.
+**/
+
 log.trace("Started execution of 'flint-slack:destroyvm.js' flintbit.")
 try {
     // To get timestamp

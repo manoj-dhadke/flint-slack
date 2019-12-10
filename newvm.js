@@ -15,6 +15,13 @@
  *  from INFIVERVE TECHNOLOGIES PTE LIMITED, SINGAPORE.
 */
 
+
+/**
+** Creation Date: 4th September 2018
+** Summary: This is Slack-Flint Bot, New Virtual Machine flintbit.
+** Description: This flintbit is developed to create aws instance.
+**/
+
 log.trace("Started execution of 'flint-slack:newvm.js' flintbit.")
 try {
     // To get timestamp

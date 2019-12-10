@@ -15,6 +15,12 @@
  *  from INFIVERVE TECHNOLOGIES PTE LIMITED, SINGAPORE.
 */
 
+/**
+** Creation Date: 26th November 2019
+** Summary: This is Slack-Flint bot add message flintbit.
+** Description: This flintbit is developed to send message to specified Slack .
+**/
+
 log.info('Started execution of flint-slack:slack_add_message.js flintbit..')
 
 log.debug("Input :: "+input)

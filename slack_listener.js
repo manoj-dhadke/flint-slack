@@ -15,6 +15,13 @@
  *  from INFIVERVE TECHNOLOGIES PTE LIMITED, SINGAPORE.
 */
 
+
+/**
+** Creation Date: 4th September 2018
+** Summary: This is Slack-Flint Bot, Message Listener flintbit.
+** Description: This flintbit is developed to listen to slack messages/responses containing Flint triggers-words.
+**/
+
 log.trace("Started execution of 'flint-slack:slack_listener.js' flintbit.")
 try {
     //For timestamp
